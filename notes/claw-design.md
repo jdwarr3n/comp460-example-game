@@ -210,3 +210,108 @@ left went from 16% different on screen to 7%, and front and back went from 29% t
 
 The reticle barely fit in the chute after that test, and a ball dropped from the claw's limit
 would have hit the chute's wall. We made the chute 0.65 wide so a ball clears it.
+
+Before building the temporary debugging version, with the top and crane removed and the
+camera overhead, I had Claude commit the game. A commit gives you a safe point to come back
+to, so you can tear things apart for a test without worrying about losing work.
+
+**Piece 2b: lowering, closing, and lifting.** Hold the mouse button to lower the claw and
+release to close and lift. At the top it opens, and the next turn begins. With a temporary
+ball centered under the claw, a grip strength of 0.3 lifted the ball to the top, and a grip
+of 1 squeezed it out, so the grab survived the move into the cabinet with the claw free to
+swing. The default grip is now 0.3.
+
+**Piece 2c: the trip to the chute.** I specified the sequence: after release, the reticle
+disappears, the claw retracts, moves to the chute by itself, and releases. Then it returns
+to its start. The first version missed the chute: the carriage moved at full speed, so the
+claw was still swinging when it opened and flung the ball. Claude slowed the automatic trips
+and made the claw wait for the swing to die down before opening. With a temporary ball, a full
+cycle then worked: lift, carry, drop through the chute, and home. The ball rolled away under
+the cabinet, because the base has no collision yet.
+
+### Phase 3: One ball and playability
+
+I asked for a ball so I could play. Claude added it, along with what makes it a game: a
+prize counter, a new ball in a random spot after each win, a hidden catch under the chute,
+and R to restart. In its tests, a centered grab on a settled claw won a prize, while a
+drop made during the swing knocked the ball away. That's the first time this was a game.
+
+The first thing playing showed was that the game was fun, and the reticle made it easier. It
+also showed a problem: the ball could get stuck by a wall where the claw couldn't reach.
+Claude suggested sloped ramps along the walls. I chose to let the claw hit the glass instead:
+it's good gameplay, and the player just has to navigate the physics. I also added an
+Attempts counter, so we can measure prizes against attempts.
+
+After some close attempts and no successes, I asked for more floor friction, because the ball
+rolled too far. Friction alone doesn't stop a rolling ball, so Claude added rolling damping
+instead. The same push went 0.39 instead of 1.64, all the way across the cabinet.
+
+Slower rolling helped, but waiting for the sway to die down took too long. We added a Sway
+Damping setting. At 3, the claw settles about 2 seconds after the carriage stops. At the old
+value it was still swinging 14 seconds later. Sway was the feature I loved earlier, but a
+feature can still need tuning once you play with it.
+
+Playing it myself, I scored 3 prizes in 9 attempts. Corners are tough, a prong once got stuck
+in the glass, and with the claw centered, the ball sometimes picks up and sometimes shoots
+out like a rocket. That isn't a criticism: randomness in a claw machine is fine. The physics
+gives the same result from the same start, so it's tiny differences in aim and timing that
+decide it, and to a player that feels like chance.
+
+After more play, I decided that what I'd been playing should be Easy mode, and that less
+damping makes a good Hard mode, so there's now an in-game setting. I dropped zoom and left the
+view fully zoomed in, since nobody needs it, and added WASD as alternates to the arrow keys.
+
+### Phase 4: Other prizes
+
+I decided prizes should be colored by value, with hard shapes worth more: ball, cube, cylinder,
+capsule, and disc, worth 1 to 5. The game cycles through them one at a time so I can see what
+I can pick up. The values are a first guess until we measure how hard each shape is.
+
+I played the five shapes and scored 2 prizes in 27 attempts, a ball and a cylinder, and it
+played like a real arcade game. I got the cylinder when it was on its side. The cube looked
+hard, the capsule was tough, and the disc is impossible. So I set the values from playing:
+ball 1, cylinder and capsule 3, cube 10, and the gold disc 100.
+
+I made the cube silver. The prongs were hitting the floor when the claw was fully lowered, which
+caused big physics jumps. At full depth the fingertips reached within 0.01 of the floor, and
+the thick fingers touched it. Claude stopped the cable a little shorter, which leaves about
+0.08 of clearance. The ball, cylinder, and capsule could all still be picked up in a test.
+
+To separate my aim from the physics, I added auto-aim on the Q key: the claw centers itself over
+the prize until the attempt is over. That measures the success rate with optimal aiming.
+
+With auto-aim, spheres worked well and everything else was very hard, and the claw seemed to stop
+short. It did: stopping it higher to avoid the floor meant the fingers couldn't get under flat
+things. I wanted the claw to hit the floor anyway, but with less jumpy closing. We measured
+the top speeds during the close across five setups. Slowing the close made it worse. Making the
+claw heavier cut the speeds about four times over, because light fingers on a light hub were being
+kicked around, and in that test the claw picked up the disc for the first time. The cube is
+now teal.
+
+Then I got the gold disc, the prize I'd called impossible. The claw opens just enough to grasp
+it. Nobody planned that fit: it came from sizing the claw for the ball and later making it
+heavier.
+
+I've been using only Q for now, to assess whether winning is feasible independent of player
+skill. I want to be able to win with optimal play. If a prize is impossible, it's not fun. Q is a test tool for now, but we might leave it in as a secret cheat, since those are fun.
+
+### Phase 5: A pile
+
+Short on time, I asked for a pile of 20 shapes, distributed roughly by the log of their
+values: 7 balls, 4 cylinders, 4 capsules, 3 cubes, and only 2 gold discs. Q now locks onto the
+prize nearest the mouse.
+
+The pile played nicely: 3 prizes in 8 attempts, including a coin. That led to the actual game
+design. A round is 60 seconds and you grab as many prizes as you can, with one auto-aim per round.
+Values dropped to 2 for cylinders and capsules, 4 for cubes, and 10 for coins, with 40 prizes
+at about 1 / value. At the current speed a round is only 4 or 5 attempts. Claude suggested
+speeding up the claw's trips, and I said no: the current speed generates aggravation when you
+miss, and then happiness when you land one.
+
+My first timed round scored 5, and it was fun. The timer makes you move, and four items is about
+right. I replaced Points with Score, removed the prize count, added a colored table of prize
+values, and put the final score in the middle of the screen. For the visuals later, the coins
+should say "Comp 460" and be shiny.
+
+I scored 14 on the next round. I had fun and felt the time pressure. The blue text was hard to read
+on gray, so the prize values moved to a white panel in the upper right.

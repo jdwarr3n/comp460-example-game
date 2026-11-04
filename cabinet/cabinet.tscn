@@ -161,6 +161,21 @@ size = Vector3(0.02, 2.4, 2.4)
 material = SubResource("dark_material")
 size = Vector3(0.5, 0.35, 0.01)
 
+[sub_resource type="BoxShape3D" id="catch_0"]
+size = Vector3(2.6, 0.04, 2.6)
+
+[sub_resource type="BoxShape3D" id="catch_1"]
+size = Vector3(2.6, 0.75, 0.04)
+
+[sub_resource type="BoxShape3D" id="catch_2"]
+size = Vector3(2.6, 0.75, 0.04)
+
+[sub_resource type="BoxShape3D" id="catch_3"]
+size = Vector3(0.04, 0.75, 2.6)
+
+[sub_resource type="BoxShape3D" id="catch_4"]
+size = Vector3(0.04, 0.75, 2.6)
+
 [node name="Cabinet" type="Node3D"]
 
 [node name="Base" type="MeshInstance3D" parent="."]
@@ -313,3 +328,25 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
 light_color = Color(1, 0.93, 0.82, 1)
 light_energy = 2.2
 omni_range = 5.5
+
+[node name="PrizeCatch" type="StaticBody3D" parent="."]
+
+[node name="CatchBottom" type="CollisionShape3D" parent="PrizeCatch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.78, 0)
+shape = SubResource("catch_0")
+
+[node name="CatchFront" type="CollisionShape3D" parent="PrizeCatch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.425, 1.28)
+shape = SubResource("catch_1")
+
+[node name="CatchBack" type="CollisionShape3D" parent="PrizeCatch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.425, -1.28)
+shape = SubResource("catch_2")
+
+[node name="CatchLeft" type="CollisionShape3D" parent="PrizeCatch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.28, -0.425, 0)
+shape = SubResource("catch_3")
+
+[node name="CatchRight" type="CollisionShape3D" parent="PrizeCatch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.28, -0.425, 0)
+shape = SubResource("catch_4")

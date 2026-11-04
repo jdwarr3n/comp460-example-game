@@ -3,25 +3,53 @@ extends Node3D
 # gantry chase that point at a limited speed. The claw hangs from the carriage on a cable,
 # so it sways when the carriage moves.
 #
+# Hold the left mouse button to pay out the cable, and release to close and lift. The claw
+# then carries its load to the chute by itself, opens, and returns to its start position.
+#
 # The cable only pulls: this script stops the Hub from moving farther from the carriage than
-# the cable's length, in any direction.
+# the cable's length, in any direction. If the claw lands on something, it stops there and
+# the cable goes slack.
+#
+# Each finger hangs on a hinge with a motor. The motor's force limit is the grip strength.
+
+signal drop_started ## Sent once at the start of each drop.
+
+enum State { READY, LOWERING, CLOSING, LIFTING, TO_CHUTE, SETTLING, OPENING, RETURNING }
 
 @export_group("Carriage")
 @export var carriage_speed := 1.2 ## Top speed of the carriage, in meters per second.
-@export var travel_limit := 0.82 ## How far the carriage can go from the center.
+@export var travel_limit := 1.08 ## How far the carriage can go from the center.
+@export var chute_stop := 0.82 ## Where the carriage stops over the chute, on both axes.
+@export var carry_speed := 0.45 ## Speed on the automatic trips to the chute and back.
 
 @export_group("Cable")
-@export var cable_length := 1.0 ## Distance from the carriage to the claw.
+@export var rest_length := 1.0 ## Cable length when the claw is at the top.
+@export var max_length := 1.99 ## The cable stops paying out at this length.
+@export var pay_out_speed := 0.6 ## How fast the claw lowers, in meters per second.
+@export var lift_speed := 0.4 ## How fast the claw lifts, in meters per second.
 @export_range(0.05, 1.0) var cable_stiffness := 0.2 ## How firmly the cable corrects stretch.
+
+@export_group("Claw")
+@export var grip_strength := 1.0 ## How hard the fingers squeeze.
+@export var close_speed := 1.5 ## How fast the fingers close.
+@export var close_time := 0.7 ## How long the claw waits for the fingers to close.
+@export var settle_time := 3.0 ## The longest the claw waits over the chute before opening.
+@export var settled_swing := 0.04 ## The claw opens once its swing is smaller than this.
+@export var open_time := 0.8 ## How long the claw stays open over the chute.
 
 @export_group("Sway")
 @export var tilt_follow := 6.0 ## How quickly the claw tilts to line up with the cable.
+@export var sway_damping := 3.0 ## How quickly the swing dies down. Higher settles faster.
 
 const OPEN_STRENGTH := 5.0
-const OPEN_SPEED := 1.5
 
+var state := State.READY
+var cable_length := 0.0
 var target := Vector3.ZERO ## Where the carriage is heading.
 var mouse_aim := true
+var drop_held := false ## Lets a test hold the drop button.
+var drops_enabled := true ## The game turns this off when the round is over.
+var auto_aim_target: Node3D = null ## While set, the claw follows this and ignores the mouse.
 
 @onready var carriage: Node3D = get_node("../Cabinet/Carriage")
 @onready var gantry: Node3D = get_node("../Cabinet/Gantry")
@@ -33,28 +61,34 @@ var mouse_aim := true
 
 var _cable_mesh := ImmediateMesh.new()
 var _floor := Plane(Vector3.UP, 0.0)
+var _timer := 0.0
+var _home := Vector3.ZERO
 
 
 func _ready() -> void:
 	cable.mesh = _cable_mesh
+	cable_length = rest_length
 	target = carriage.global_position
-	for hinge in hinges:
-		hinge.set_flag(HingeJoint3D.FLAG_ENABLE_MOTOR, true)
-		hinge.set_param(HingeJoint3D.PARAM_MOTOR_TARGET_VELOCITY, -OPEN_SPEED)
-		hinge.set_param(HingeJoint3D.PARAM_MOTOR_MAX_IMPULSE, OPEN_STRENGTH)
+	_home = carriage.global_position
+	hub.linear_damp = sway_damping
+	_set_fingers(-close_speed, OPEN_STRENGTH)
 
 
 func _unhandled_input(event: InputEvent) -> void:
 	# Aim changes only when the mouse moves, so orbiting the camera leaves the claw alone.
-	if mouse_aim and event is InputEventMouseMotion:
+	if mouse_aim and auto_aim_target == null and state == State.READY and event is InputEventMouseMotion:
 		_aim_at(event.position)
 
 
 func _physics_process(delta: float) -> void:
+	var cable_rate := _update_state(delta)
+	if state == State.READY and is_instance_valid(auto_aim_target):
+		target = auto_aim_target.global_position
 	var before := carriage.global_position
-	_move_carriage(delta)
+	if state in [State.READY, State.TO_CHUTE, State.RETURNING]:
+		_move_carriage(delta)
 	var carriage_velocity := (carriage.global_position - before) / delta
-	_apply_cable(carriage_velocity, delta)
+	_apply_cable(cable_rate, carriage_velocity, delta)
 	_tilt_claw()
 
 
@@ -62,6 +96,72 @@ func _process(_delta: float) -> void:
 	_draw_cable()
 	var landing := carriage.global_position
 	marker.global_position = Vector3(landing.x, 0.012, landing.z)
+	marker.visible = state in [State.READY, State.LOWERING]
+
+
+func slack() -> float:
+	return maxf(cable_length - hub.global_position.distance_to(carriage.global_position), 0.0)
+
+
+# Runs the drop sequence. Returns how fast the cable is changing: positive pays out.
+func _update_state(delta: float) -> float:
+	var held := drop_held or Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)
+	var rate := 0.0
+	match state:
+		State.READY:
+			if held and drops_enabled:
+				state = State.LOWERING
+				drop_started.emit()
+		State.LOWERING:
+			if held:
+				if cable_length < max_length:
+					rate = pay_out_speed
+			else:
+				state = State.CLOSING
+				_timer = close_time
+				_set_fingers(close_speed, grip_strength)
+		State.CLOSING:
+			_timer -= delta
+			if _timer <= 0.0:
+				state = State.LIFTING
+		State.LIFTING:
+			rate = -lift_speed
+			if cable_length <= rest_length:
+				rate = 0.0
+				state = State.TO_CHUTE
+				target = Vector3(chute_stop, 0.0, chute_stop)
+		State.TO_CHUTE:
+			if _carriage_arrived():
+				state = State.SETTLING
+				_timer = settle_time
+		State.SETTLING:
+			_timer -= delta
+			if _timer <= 0.0 or _swing() < settled_swing:
+				state = State.OPENING
+				_timer = open_time
+				_set_fingers(-close_speed, OPEN_STRENGTH)
+		State.OPENING:
+			_timer -= delta
+			if _timer <= 0.0:
+				state = State.RETURNING
+				target = _home
+		State.RETURNING:
+			if _carriage_arrived():
+				state = State.READY
+				auto_aim_target = null
+	cable_length = clampf(cable_length + rate * delta, rest_length, max_length)
+	return rate
+
+
+func _swing() -> float:
+	var offset := hub.global_position - carriage.global_position
+	return Vector2(offset.x, offset.z).length()
+
+
+func _carriage_arrived() -> bool:
+	var here := carriage.global_position
+	var there := Vector2(target.x, target.z)
+	return Vector2(here.x, here.z).distance_to(there) < 0.005
 
 
 func _aim_at(screen_point: Vector2) -> void:
@@ -79,11 +179,12 @@ func _move_carriage(delta: float) -> void:
 		clampf(target.z, -travel_limit, travel_limit)
 	)
 	var position_now := carriage.global_position
-	carriage.global_position = position_now.move_toward(goal, carriage_speed * delta)
+	var speed := carriage_speed if state == State.READY else carry_speed
+	carriage.global_position = position_now.move_toward(goal, speed * delta)
 	gantry.global_position.z = carriage.global_position.z
 
 
-func _apply_cable(carriage_velocity: Vector3, delta: float) -> void:
+func _apply_cable(cable_rate: float, carriage_velocity: Vector3, delta: float) -> void:
 	var offset := hub.global_position - carriage.global_position
 	var distance := offset.length()
 	if distance <= cable_length:
@@ -91,7 +192,7 @@ func _apply_cable(carriage_velocity: Vector3, delta: float) -> void:
 	var along_cable := offset / distance
 	var stretch := distance - cable_length
 	var speed_away := (hub.linear_velocity - carriage_velocity).dot(along_cable)
-	var allowed := -cable_stiffness * stretch / delta
+	var allowed := cable_rate - cable_stiffness * stretch / delta
 	if speed_away > allowed:
 		hub.linear_velocity -= along_cable * (speed_away - allowed)
 
@@ -103,9 +204,23 @@ func _tilt_claw() -> void:
 	hub.angular_velocity = turn * tilt_follow
 
 
+func _set_fingers(speed: float, strength: float) -> void:
+	for hinge in hinges:
+		hinge.set_flag(HingeJoint3D.FLAG_ENABLE_MOTOR, true)
+		hinge.set_param(HingeJoint3D.PARAM_MOTOR_TARGET_VELOCITY, speed)
+		hinge.set_param(HingeJoint3D.PARAM_MOTOR_MAX_IMPULSE, strength)
+
+
 func _draw_cable() -> void:
+	# A slack cable is drawn bowed out to the side. It's only a drawing: it has no physics.
+	var top := carriage.global_position
+	var bottom := hub.global_position
+	var sag := slack() * 0.35
 	_cable_mesh.clear_surfaces()
-	_cable_mesh.surface_begin(Mesh.PRIMITIVE_LINES)
-	_cable_mesh.surface_add_vertex(carriage.global_position)
-	_cable_mesh.surface_add_vertex(hub.global_position)
+	_cable_mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP)
+	for i in 25:
+		var t := i / 24.0
+		var point := top.lerp(bottom, t)
+		point.x += sag * sin(PI * t)
+		_cable_mesh.surface_add_vertex(point)
 	_cable_mesh.surface_end()

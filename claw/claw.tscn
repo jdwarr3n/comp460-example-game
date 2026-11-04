@@ -67,7 +67,7 @@ mesh = SubResource("marker_mesh")
 
 [node name="Hub" type="RigidBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.47, 0)
-mass = 0.5
+mass = 2.0
 linear_damp = 0.15
 can_sleep = false
 
@@ -79,7 +79,7 @@ shape = SubResource("hub_shape")
 
 [node name="FingerA" type="RigidBody3D" parent="."]
 transform = Transform3D(1.0, 0, 0.0, 0, 1, 0, -0.0, 0, 1.0, 0.08, 1.47, -0.0)
-mass = 0.05
+mass = 0.2
 physics_material_override = SubResource("finger_physics")
 can_sleep = false
 
@@ -109,7 +109,7 @@ angular_limit/lower = 0.0
 
 [node name="FingerB" type="RigidBody3D" parent="."]
 transform = Transform3D(-0.5, 0, 0.866, 0, 1, 0, -0.866, 0, -0.5, -0.04, 1.47, -0.0693)
-mass = 0.05
+mass = 0.2
 physics_material_override = SubResource("finger_physics")
 can_sleep = false
 
@@ -139,7 +139,7 @@ angular_limit/lower = 0.0
 
 [node name="FingerC" type="RigidBody3D" parent="."]
 transform = Transform3D(-0.5, 0, -0.866, 0, 1, 0, 0.866, 0, -0.5, -0.04, 1.47, 0.0693)
-mass = 0.05
+mass = 0.2
 physics_material_override = SubResource("finger_physics")
 can_sleep = false
 

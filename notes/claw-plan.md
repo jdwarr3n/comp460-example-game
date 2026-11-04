@@ -18,8 +18,27 @@ player positions the claw, drops it, and tries to carry a prize to the chute.
   back up.
 - **After that:** the claw travels to the chute on its own and opens. The player can't
   steer it, so a prize can slip on the way home.
-- **Arrow keys:** orbit the camera around the cabinet.
-- **Scroll wheel:** zoom.
+- **Arrow keys or WASD:** orbit the camera around the cabinet.
+- **Tab:** switches between Easy and Hard.
+- **R:** restarts.
+- **Q:** auto-aim. The claw centers over the prize and ignores the mouse until the attempt is
+  over. A test tool for now, and maybe a secret cheat later. It locks onto the prize nearest
+  the mouse, so it works in a pile.
+
+## Rules
+
+A round lasts 60 seconds, starting on the first drop. Grab as many prizes as you can. You
+get one auto-aim (Q) per round. A drop in progress when time runs out gets to finish.
+
+| Prize | Value | Count of 40 |
+|---|---|---|
+| Ball | 1 | 17 |
+| Cylinder | 2 | 9 |
+| Capsule | 2 | 8 |
+| Cube | 4 | 4 |
+| Gold coin | 10 | 2 |
+
+Counts are about 1 / value.
 
 ## How it works
 
@@ -53,7 +72,16 @@ player positions the claw, drops it, and tries to carry a prize to the chute.
 - **Tuning:** grip strength, claw speed, cable swing, and drop speed are settings in
   Godot's Inspector, so they can be changed without touching code.
 
+## Reach
+
+The claw can reach all the way to the glass and hit it. A ball that rolls to a wall stays in
+play, and the player has to work with the physics to get it. The game counts prizes and
+attempts, so prizes per attempt measures how hard it is.
+
 ## Difficulty
+
+Easy and Hard differ in how much the physics is damped: Hard has more claw sway and a ball
+that rolls further. Tab switches between them during play.
 
 Difficulty will likely be set by grip strength. Each difficulty level, or each machine,
 uses a different grip. Grip works in both directions: too weak and the prize slips out, too
@@ -109,25 +137,28 @@ different game.
 the camera. We added the glass top during this phase.
 *Done when:* I can orbit and zoom around the cabinet and see the chute through the glass.
 
-**Phase 2: Claw and movement.** Add the cable, the claw, mouse aiming, lowering, closing,
+**Phase 2: Claw and movement (done).** Add the cable, the claw, mouse aiming, lowering, closing,
 retracting, and the trip to the chute.
 Built in pieces: (a) the claw hanging in the cabinet, with the mouse moving the carriage and
-real sway (built, awaiting Joe's check), (b) lowering, closing, and lifting, (c) the trip to
-the chute, opening, and returning home, with a landing marker.
+real sway (done), (b) lowering, closing, and lifting (done), (c) the trip to the chute, opening, and returning
+home (done). The reticle disappears once the player releases the
+button and comes back for the next turn.
 *Done when:* from any camera angle, the claw goes where I point, and a full cycle runs
 from drop to chute.
 
-**Phase 3: One ball and playability.** Add a single ball in the cabinet and tune the grip
+**Phase 3: One ball and playability (done).** Add a single ball in the cabinet and tune the grip
 found in Phase 0. Add a counter that goes up when the ball lands in the chute.
 *Done when:* grabbing the ball feels good, it's possible but not guaranteed, and the
 counter works.
 
-**Phase 4: Other objects.** Add other shapes, testing one at a time.
+**Phase 4: Other objects (built, being played).** Ball (red, 1), cylinder (blue, 3), capsule (purple, 3),
+cube (green, 10), and gold disc (100, close to impossible). Press N to skip to the next shape. Add other shapes, testing one at a time.
 *Done when:* each new shape can be grabbed and dropped without strange behavior.
 
-**Phase 5: A pile.** Fill the cabinet with a pile of objects.
+**Phase 5: A pile (built, being played).** See Rules. Fill the cabinet with a pile of objects.
 *Done when:* the pile settles without jitter, and the game still runs smoothly and plays
 well.
 
-**Later phases.** Menus, sound, better arcade-style visuals, more kinds of objects, plush
+**Later phases.** Gold coins should say "Comp 460" and be shiny. Better UI (Tab is a stand-in
+for the difficulty setting), menus, sound, better arcade-style visuals, more kinds of objects, plush
 toys, and several machines as levels.

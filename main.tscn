@@ -1,5 +1,6 @@
 [gd_scene format=3]
 
+[ext_resource type="Script" path="res://game.gd" id="game"]
 [ext_resource type="PackedScene" path="res://cabinet/cabinet.tscn" id="cabinet"]
 [ext_resource type="PackedScene" path="res://claw/claw.tscn" id="claw"]
 [ext_resource type="Script" path="res://camera/orbit_camera.gd" id="camera"]
@@ -22,7 +23,19 @@ size = Vector3(30, 0.1, 30)
 [sub_resource type="BoxShape3D" id="room_shape"]
 size = Vector3(30, 0.1, 30)
 
+[sub_resource type="StyleBoxFlat" id="panel_style"]
+bg_color = Color(1, 1, 1, 1)
+content_margin_left = 36.0
+content_margin_top = 28.0
+content_margin_right = 36.0
+content_margin_bottom = 28.0
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
 [node name="Main" type="Node3D"]
+script = ExtResource("game")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("env")
@@ -47,3 +60,38 @@ fov = 38.0
 script = ExtResource("camera")
 
 [node name="Claw" parent="." instance=ExtResource("claw")]
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Status" type="Label" parent="UI"]
+offset_left = 50.0
+offset_top = 40.0
+theme_override_font_sizes/font_size = 56
+
+[node name="ValuePanel" type="PanelContainer" parent="UI"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -520.0
+offset_top = 40.0
+offset_right = -40.0
+offset_bottom = 520.0
+theme_override_styles/panel = SubResource("panel_style")
+
+[node name="Values" type="RichTextLabel" parent="UI/ValuePanel"]
+layout_mode = 2
+bbcode_enabled = true
+theme_override_font_sizes/normal_font_size = 56
+theme_override_colors/default_color = Color(0.1, 0.1, 0.1, 1)
+scroll_active = false
+
+[node name="Final" type="Label" parent="UI"]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+horizontal_alignment = 1
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 110
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24

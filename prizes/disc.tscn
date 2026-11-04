@@ -1,0 +1,36 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://prizes/prize.gd" id="script"]
+
+[sub_resource type="StandardMaterial3D" id="prize_material"]
+albedo_color = Color(1, 0.78, 0.15, 1)
+roughness = 0.35
+
+[sub_resource type="CylinderMesh" id="prize_mesh"]
+material = SubResource("prize_material")
+top_radius = 0.2
+bottom_radius = 0.2
+height = 0.05
+
+[sub_resource type="CylinderShape3D" id="prize_shape"]
+radius = 0.2
+height = 0.05
+
+[sub_resource type="PhysicsMaterial" id="prize_physics"]
+friction = 0.8
+bounce = 0.1
+
+[node name="Disc" type="RigidBody3D"]
+mass = 0.2
+physics_material_override = SubResource("prize_physics")
+linear_damp = 0.4
+angular_damp = 5.0
+script = ExtResource("script")
+prize_name = "Gold coin"
+value = 10
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+mesh = SubResource("prize_mesh")
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+shape = SubResource("prize_shape")
