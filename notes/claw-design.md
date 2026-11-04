@@ -187,3 +187,8 @@ next mouse movement makes the claw jump to the new spot. Claude recommended WASD
 to the camera. I stayed with mouse pointing. Players will rotate the camera to focus on
 their target and then use the mouse, and the mouse button already drops the claw. With WASD
 and arrows, a player would have to move a hand between the keyboard and the mouse.
+
+The claw and chute looked too big for the cabinet, so I enlarged the cabinet to 2.4 wide, deep,
+and tall. We kept the claw at its size, because the grab was tuned there. That also solved
+the earlier problem of the carriage stopping short of the chute: it now reaches the chute
+corner without the claw hitting the glass.

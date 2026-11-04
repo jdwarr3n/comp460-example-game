@@ -66,7 +66,7 @@ transform = Transform3D(1, 0, 0, 0, 0.1, 0, 0, 0, 1, 0, 0.012, 0)
 mesh = SubResource("marker_mesh")
 
 [node name="Hub" type="RigidBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.17, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.47, 0)
 mass = 0.5
 linear_damp = 0.15
 can_sleep = false
@@ -78,7 +78,7 @@ mesh = SubResource("hub_mesh")
 shape = SubResource("hub_shape")
 
 [node name="FingerA" type="RigidBody3D" parent="."]
-transform = Transform3D(1.0, 0, 0.0, 0, 1, 0, -0.0, 0, 1.0, 0.08, 1.17, -0.0)
+transform = Transform3D(1.0, 0, 0.0, 0, 1, 0, -0.0, 0, 1.0, 0.08, 1.47, -0.0)
 mass = 0.05
 physics_material_override = SubResource("finger_physics")
 can_sleep = false
@@ -100,7 +100,7 @@ transform = Transform3D(0.9231, 0.3846, 0, -0.3846, 0.9231, 0, 0, 0, 1, 0.17, -0
 shape = SubResource("lower_shape")
 
 [node name="HingeA" type="HingeJoint3D" parent="."]
-transform = Transform3D(1.0, 0, 0.0, 0, 1, 0, -0.0, 0, 1.0, 0.08, 1.17, -0.0)
+transform = Transform3D(1.0, 0, 0.0, 0, 1, 0, -0.0, 0, 1.0, 0.08, 1.47, -0.0)
 node_a = NodePath("../Hub")
 node_b = NodePath("../FingerA")
 angular_limit/enable = true
@@ -108,7 +108,7 @@ angular_limit/upper = 1.05
 angular_limit/lower = 0.0
 
 [node name="FingerB" type="RigidBody3D" parent="."]
-transform = Transform3D(-0.5, 0, 0.866, 0, 1, 0, -0.866, 0, -0.5, -0.04, 1.17, -0.0693)
+transform = Transform3D(-0.5, 0, 0.866, 0, 1, 0, -0.866, 0, -0.5, -0.04, 1.47, -0.0693)
 mass = 0.05
 physics_material_override = SubResource("finger_physics")
 can_sleep = false
@@ -130,7 +130,7 @@ transform = Transform3D(0.9231, 0.3846, 0, -0.3846, 0.9231, 0, 0, 0, 1, 0.17, -0
 shape = SubResource("lower_shape")
 
 [node name="HingeB" type="HingeJoint3D" parent="."]
-transform = Transform3D(-0.5, 0, 0.866, 0, 1, 0, -0.866, 0, -0.5, -0.04, 1.17, -0.0693)
+transform = Transform3D(-0.5, 0, 0.866, 0, 1, 0, -0.866, 0, -0.5, -0.04, 1.47, -0.0693)
 node_a = NodePath("../Hub")
 node_b = NodePath("../FingerB")
 angular_limit/enable = true
@@ -138,7 +138,7 @@ angular_limit/upper = 1.05
 angular_limit/lower = 0.0
 
 [node name="FingerC" type="RigidBody3D" parent="."]
-transform = Transform3D(-0.5, 0, -0.866, 0, 1, 0, 0.866, 0, -0.5, -0.04, 1.17, 0.0693)
+transform = Transform3D(-0.5, 0, -0.866, 0, 1, 0, 0.866, 0, -0.5, -0.04, 1.47, 0.0693)
 mass = 0.05
 physics_material_override = SubResource("finger_physics")
 can_sleep = false
@@ -160,7 +160,7 @@ transform = Transform3D(0.9231, 0.3846, 0, -0.3846, 0.9231, 0, 0, 0, 1, 0.17, -0
 shape = SubResource("lower_shape")
 
 [node name="HingeC" type="HingeJoint3D" parent="."]
-transform = Transform3D(-0.5, 0, -0.866, 0, 1, 0, 0.866, 0, -0.5, -0.04, 1.17, 0.0693)
+transform = Transform3D(-0.5, 0, -0.866, 0, 1, 0, 0.866, 0, -0.5, -0.04, 1.47, 0.0693)
 node_a = NodePath("../Hub")
 node_b = NodePath("../FingerC")
 angular_limit/enable = true

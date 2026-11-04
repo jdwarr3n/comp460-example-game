@@ -8,7 +8,7 @@ extends Node3D
 
 @export_group("Carriage")
 @export var carriage_speed := 1.2 ## Top speed of the carriage, in meters per second.
-@export var travel_limit := 0.42 ## How far the carriage can go from the center.
+@export var travel_limit := 0.82 ## How far the carriage can go from the center.
 
 @export_group("Cable")
 @export var cable_length := 1.0 ## Distance from the carriage to the claw.
