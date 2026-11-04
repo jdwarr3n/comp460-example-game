@@ -315,3 +315,6 @@ should say "Comp 460" and be shiny.
 
 I scored 14 on the next round. I had fun and felt the time pressure. The blue text was hard to read
 on gray, so the prize values moved to a white panel in the upper right.
+
+The final version, minus polish, was ready at 5 pm: five hours from game conception, through
+design, to final version. That's excellent.
