@@ -24,7 +24,8 @@ player positions the claw, drops it, and tries to carry a prize to the chute.
 ## How it works
 
 - **Camera:** sits on a sphere around the cabinet, with its position set by latitude and
-  longitude. Latitude is clamped so it can't go under the floor or flip over the top.
+  longitude. It uses a narrow 38-degree lens from further back, so equal distances look
+  nearly equal on screen. Latitude is clamped so it can't go under the floor or flip over the top.
 - **Aiming:** a ray from the mouse cursor hits the cabinet floor, and a carriage chases that
   point at a limited speed. This keeps the controls correct from every camera angle. We
   started with a plane at the top of the cabinet, but at low camera angles that plane is

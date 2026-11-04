@@ -192,3 +192,21 @@ The claw and chute looked too big for the cabinet, so I enlarged the cabinet to 
 and tall. We kept the claw at its size, because the grab was tuned there. That also solved
 the earlier problem of the carriage stopping short of the chute: it now reaches the chute
 corner without the claw hitting the glass.
+
+I spent a fair bit of time double-checking the cabinet measurements. The claw's range looked
+uneven to me, and Claude's first answers explained it away instead of finding out. So I had
+Claude remove the top and the crane and look straight down with a camera at infinity, which
+removes all perspective. Then I checked a screenshot myself, with a circle drawn around the
+reticle, and we resized the chute until the reticle touched both of its walls in the corner.
+The range turned out to be even. The unevenness came from the camera: its position and wide
+lens make equal distances look different on screen. Checking still paid off: it pinned down
+the real cause, showed that Claude's first explanation was weak, and fixed a small flaw
+where the chute's walls met. Don't take an LLM's word for it. Design a test you can
+check yourself.
+
+Since the distortion would confuse players, we changed the camera lens from 75 degrees to
+38 and moved the camera back to keep the same framing. The same distance on the right and
+left went from 16% different on screen to 7%, and front and back went from 29% to 13%.
+
+The reticle barely fit in the chute after that test, and a ball dropped from the claw's limit
+would have hit the chute's wall. We made the chute 0.65 wide so a ball clears it.

@@ -43,6 +43,7 @@ shape = SubResource("room_shape")
 [node name="Cabinet" parent="." instance=ExtResource("cabinet")]
 
 [node name="Camera" type="Camera3D" parent="."]
+fov = 38.0
 script = ExtResource("camera")
 
 [node name="Claw" parent="." instance=ExtResource("claw")]

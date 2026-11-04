@@ -5,13 +5,13 @@ extends Camera3D
 @export var target := Vector3(0, 1.0, 0) ## The point the camera looks at.
 @export var longitude := 30.0 ## Degrees around the cabinet.
 @export var latitude := 20.0 ## Degrees above the horizon.
-@export var radius := 4.8 ## Distance from the target.
+@export var radius := 10.5 ## Distance from the target.
 @export var turn_speed := 70.0 ## Degrees per second.
-@export var zoom_step := 0.3 ## Radius change per wheel click.
+@export var zoom_step := 0.6 ## Radius change per wheel click.
 @export var min_latitude := -8.0 ## Keeps the camera above the floor.
 @export var max_latitude := 80.0 ## Keeps the camera from flipping over the top.
-@export var min_radius := 3.4
-@export var max_radius := 11.0
+@export var min_radius := 7.0
+@export var max_radius := 22.0
 
 
 func _ready() -> void:

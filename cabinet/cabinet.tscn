@@ -40,35 +40,35 @@ size = Vector3(2.6, 0.75, 2.6)
 
 [sub_resource type="BoxMesh" id="mesh_1"]
 material = SubResource("felt_material")
-size = Vector3(1.85, 0.05, 2.4)
+size = Vector3(1.735, 0.05, 2.4)
 
 [sub_resource type="BoxShape3D" id="shape_1"]
-size = Vector3(1.85, 0.05, 2.4)
+size = Vector3(1.735, 0.05, 2.4)
 
 [sub_resource type="BoxMesh" id="mesh_2"]
 material = SubResource("felt_material")
-size = Vector3(0.55, 0.05, 1.85)
+size = Vector3(0.665, 0.05, 1.735)
 
 [sub_resource type="BoxShape3D" id="shape_2"]
-size = Vector3(0.55, 0.05, 1.85)
+size = Vector3(0.665, 0.05, 1.735)
 
 [sub_resource type="BoxMesh" id="mesh_3"]
 material = SubResource("dark_material")
-size = Vector3(0.55, 0.01, 0.55)
+size = Vector3(0.665, 0.01, 0.665)
 
 [sub_resource type="BoxMesh" id="mesh_4"]
 material = SubResource("chute_material")
-size = Vector3(0.03, 0.3, 0.55)
+size = Vector3(0.03, 0.3, 0.68)
 
 [sub_resource type="BoxShape3D" id="shape_4"]
-size = Vector3(0.03, 0.3, 0.55)
+size = Vector3(0.03, 0.3, 0.68)
 
 [sub_resource type="BoxMesh" id="mesh_5"]
 material = SubResource("chute_material")
-size = Vector3(0.55, 0.3, 0.03)
+size = Vector3(0.68, 0.3, 0.03)
 
 [sub_resource type="BoxShape3D" id="shape_5"]
-size = Vector3(0.55, 0.3, 0.03)
+size = Vector3(0.68, 0.3, 0.03)
 
 [sub_resource type="BoxMesh" id="mesh_6"]
 material = SubResource("metal_material")
@@ -168,7 +168,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.425, 0)
 mesh = SubResource("mesh_0")
 
 [node name="FloorMain" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.275, -0.025, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3325, -0.025, 0)
 
 [node name="Mesh" type="MeshInstance3D" parent="FloorMain"]
 mesh = SubResource("mesh_1")
@@ -177,7 +177,7 @@ mesh = SubResource("mesh_1")
 shape = SubResource("shape_1")
 
 [node name="FloorSide" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.925, -0.025, -0.275)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8675, -0.025, -0.3325)
 
 [node name="Mesh" type="MeshInstance3D" parent="FloorSide"]
 mesh = SubResource("mesh_2")
@@ -186,11 +186,11 @@ mesh = SubResource("mesh_2")
 shape = SubResource("shape_2")
 
 [node name="ChuteHole" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.925, -0.04, 0.925)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8675, -0.04, 0.8675)
 mesh = SubResource("mesh_3")
 
 [node name="ChuteWallA" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.65, 0.15, 0.925)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.535, 0.15, 0.86)
 
 [node name="Mesh" type="MeshInstance3D" parent="ChuteWallA"]
 mesh = SubResource("mesh_4")
@@ -199,7 +199,7 @@ mesh = SubResource("mesh_4")
 shape = SubResource("shape_4")
 
 [node name="ChuteWallB" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.925, 0.15, 0.65)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.86, 0.15, 0.535)
 
 [node name="Mesh" type="MeshInstance3D" parent="ChuteWallB"]
 mesh = SubResource("mesh_5")
