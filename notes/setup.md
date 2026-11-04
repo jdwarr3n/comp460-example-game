@@ -58,11 +58,23 @@ and choose from the list. All the setup steps below are normal work.
 
 ### Step 5: Install Godot
 
-Ask Claude Code to help install Godot.
+Let Claude Code do this one. It's much easier than installing Godot by hand. Type this
+in the Claude panel:
+
+> Install the latest standard version of Godot 4 on this computer, not the .NET version.
+> Then make sure I can launch it from the Start menu or Applications.
+
+Godot is a small portable app, so it may not add a shortcut on its own. That's why the
+prompt asks for one. Check that it opens to the Project Manager window.
 
 ### Step 6: Install godot-tools
 
-Ask Claude Code to help install the godot-tools extension.
+Type this in the Claude panel:
+
+> Install the godot-tools extension in VS Code and point it at my Godot install.
+
+Pointing it at Godot matters, because the extension won't find Godot on its own after
+this kind of install. Reload VS Code if the extension doesn't show up.
 
 ### Step 7: Install Git and make a GitHub account
 
@@ -83,7 +95,12 @@ Read the README and the other notes in the repo.
 
 ### Step 10: Run the game
 
-Open the project in Godot and press Play.
+1. In Godot's Project Manager, click **Import**.
+2. Choose the `project.godot` file in the folder you cloned. If Godot's file dialog is
+   hard to navigate, copy the full path and paste it in.
+3. Press **F5** or the Play button.
+
+[Godot Editor basics](godot-editor-basics.md) explains what you're looking at.
 
 ### Step 11: Change something
 
