@@ -25,9 +25,10 @@ player positions the claw, drops it, and tries to carry a prize to the chute.
 
 - **Camera:** sits on a sphere around the cabinet, with its position set by latitude and
   longitude. Latitude is clamped so it can't go under the floor or flip over the top.
-- **Aiming:** a ray from the mouse cursor hits a horizontal plane at the top of the
-  cabinet, and a carriage chases that point at a limited speed. This keeps the controls
-  correct from every camera angle.
+- **Aiming:** a ray from the mouse cursor hits the cabinet floor, and a carriage chases that
+  point at a limited speed. This keeps the controls correct from every camera angle. We
+  started with a plane at the top of the cabinet, but at low camera angles that plane is
+  above the camera.
 - **Carriage and cable:** the carriage moves along the top of the cabinet, as on a real
   machine. The claw is a physics body hanging from it on a cable. Changing the cable's
   length is what raises and lowers the claw.
@@ -37,8 +38,12 @@ player positions the claw, drops it, and tries to carry a prize to the chute.
   carriage moves.
 - **Grip:** each prong hangs on a hinge with a motor. The motor's force limit is the grip
   strength, like the solenoid in a real machine.
-- **Landing marker:** a shadow or small marker on the floor directly below the claw, so
-  the player can judge depth.
+- **Landing marker:** a bright green ring on the floor directly below the carriage, so the
+  player can see where the claw will land.
+- **Aim only moves with the mouse:** orbiting the camera doesn't move the claw, so the player
+  can walk around and check their aim.
+- **Hands:** one hand on the arrow keys and one on the mouse. The player orbits to study the
+  target, then points and holds the button to drop.
 - **Glass:** the transparent windows are just for looks. Invisible collision walls keep
   the prizes in.
 - **Glass top:** the roof is glass too, so the player can see the rails, gantry, and
@@ -100,11 +105,14 @@ fail. If nothing can tune it that way, we decide between the joint fallback and 
 different game.
 
 **Phase 1: Cabinet and viewer (done).** Build the cabinet with its windows and prize chute, and
-the camera.
+the camera. We added the glass top during this phase.
 *Done when:* I can orbit and zoom around the cabinet and see the chute through the glass.
 
 **Phase 2: Claw and movement.** Add the cable, the claw, mouse aiming, lowering, closing,
 retracting, and the trip to the chute.
+Built in pieces: (a) the claw hanging in the cabinet, with the mouse moving the carriage and
+real sway (built, awaiting Joe's check), (b) lowering, closing, and lifting, (c) the trip to
+the chute, opening, and returning home, with a landing marker.
 *Done when:* from any camera angle, the claw goes where I point, and a full cycle runs
 from drop to chute.
 

@@ -157,4 +157,33 @@ scene.
 
 Orbiting over the top showed a solid roof. I could have capped the camera, but I made the
 top glass instead, so you can see the rails and carriage above the claw. It also gives the
-player a straight-down view, which helps since aim is the main skill. The top view turned out to be awesome, and players will love discovering it.
+player a straight-down view, which helps since aim is the main skill. The glass top wasn't
+in the plan. Part of the design process is adding new features as you see what the game
+could be, so a plan is a starting point, not a contract. The top view turned out to be awesome, and players will love discovering it.
+
+### Phase 2: Claw and movement
+
+**Piece 2a: swaying claw.** I asked for just the claw hanging partway down, so I could move
+it and watch it sway, with no opening or closing yet. Claude moved the claw into its own
+scene and let it swing and tilt freely on the cable. In the middle of the cabinet it swings
+about every 2 seconds and dies away over about 10. The first test ran it to the edge,
+where it hit the glass, lost its swing, and later got a sudden kick. Pulling the carriage's
+travel limit in fixed that, but the limit now stops short of the chute, which we'll
+need to solve in piece 2c.
+
+Playing it, I found the sway awesome, but two things were wrong. Using the camera moved the
+claw, which would make players mad, and I had trouble positioning it. Claude first explained
+the positioning trouble as having nothing to show where the claw was, but I wasn't convinced
+and questioned it. Checking turned up a possible real bug: the game was scaling a 1920 by 1080
+picture to fit my window, so mouse positions and camera rays might not agree. We removed the
+scaling, made the aim change only when the mouse moves, and added a green landing ring. Don't
+accept an explanation just because it sounds good: if it doesn't match what you see, push back.
+
+By playing the game, I helped catch an error in Claude's code. That's natural and important:
+Claude can run the code, but only a person playing it notices that something feels wrong.
+
+Next came a decision about controls. Pointing at the floor has a catch: after orbiting, the
+next mouse movement makes the claw jump to the new spot. Claude recommended WASD relative
+to the camera. I stayed with mouse pointing. Players will rotate the camera to focus on
+their target and then use the mouse, and the mouse button already drops the claw. With WASD
+and arrows, a player would have to move a hand between the keyboard and the mouse.

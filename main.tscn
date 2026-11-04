@@ -1,6 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="PackedScene" path="res://cabinet/cabinet.tscn" id="cabinet"]
+[ext_resource type="PackedScene" path="res://claw/claw.tscn" id="claw"]
 [ext_resource type="Script" path="res://camera/orbit_camera.gd" id="camera"]
 
 [sub_resource type="Environment" id="env"]
@@ -43,3 +44,5 @@ shape = SubResource("room_shape")
 
 [node name="Camera" type="Camera3D" parent="."]
 script = ExtResource("camera")
+
+[node name="Claw" parent="." instance=ExtResource("claw")]
