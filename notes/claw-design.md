@@ -146,3 +146,15 @@ Bugs sometimes turn into game features. Nobody designed a prize riding up perche
 outside of the claw, but as a player it would be a thrill. Before fixing a bug, ask whether
 it makes the game more fun. See the video:
 [ball-stuck-outside-claw.mp4](../bloopers/ball-stuck-outside-claw.mp4).
+
+### Phase 1: Cabinet and viewer
+
+With the grab working, I moved on to the easy part. Claude built the cabinet as its own
+scene: a red base, felt floor, glass walls with invisible collision, a prize chute with a
+hole in the floor, and a roof with a blank marquee. The camera sits on a sphere around it.
+The game now starts from `main.tscn`, and the grip test stays in the project as a separate
+scene.
+
+Orbiting over the top showed a solid roof. I could have capped the camera, but I made the
+top glass instead, so you can see the rails and carriage above the claw. It also gives the
+player a straight-down view, which helps since aim is the main skill. The top view turned out to be awesome, and players will love discovering it.

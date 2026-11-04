@@ -41,6 +41,9 @@ player positions the claw, drops it, and tries to carry a prize to the chute.
   the player can judge depth.
 - **Glass:** the transparent windows are just for looks. Invisible collision walls keep
   the prizes in.
+- **Glass top:** the roof is glass too, so the player can see the rails, gantry, and
+  carriage. It also gives the player a straight-down view for judging aim. We don't point
+  this out: players discover it by orbiting over the top.
 - **Tuning:** grip strength, claw speed, cable swing, and drop speed are settings in
   Godot's Inspector, so they can be changed without touching code.
 
@@ -96,7 +99,7 @@ aiming error. A dead-center grab should usually work, and a sloppy one should us
 fail. If nothing can tune it that way, we decide between the joint fallback and a
 different game.
 
-**Phase 1: Cabinet and viewer.** Build the cabinet with its windows and prize chute, and
+**Phase 1: Cabinet and viewer (done).** Build the cabinet with its windows and prize chute, and
 the camera.
 *Done when:* I can orbit and zoom around the cabinet and see the chute through the glass.
 

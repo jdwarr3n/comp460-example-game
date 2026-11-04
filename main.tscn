@@ -1,0 +1,45 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://cabinet/cabinet.tscn" id="cabinet"]
+[ext_resource type="Script" path="res://camera/orbit_camera.gd" id="camera"]
+
+[sub_resource type="Environment" id="env"]
+background_mode = 1
+background_color = Color(0.07, 0.07, 0.1, 1)
+ambient_light_source = 2
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_energy = 0.4
+
+[sub_resource type="StandardMaterial3D" id="room_material"]
+albedo_color = Color(0.2, 0.2, 0.24, 1)
+roughness = 0.7
+
+[sub_resource type="BoxMesh" id="room_mesh"]
+material = SubResource("room_material")
+size = Vector3(30, 0.1, 30)
+
+[sub_resource type="BoxShape3D" id="room_shape"]
+size = Vector3(30, 0.1, 30)
+
+[node name="Main" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("env")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866, -0.354, 0.354, 0, 0.707, 0.707, -0.5, -0.612, 0.612, 0, 5, 0)
+shadow_enabled = true
+
+[node name="RoomFloor" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.85, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="RoomFloor"]
+mesh = SubResource("room_mesh")
+
+[node name="Collision" type="CollisionShape3D" parent="RoomFloor"]
+shape = SubResource("room_shape")
+
+[node name="Cabinet" parent="." instance=ExtResource("cabinet")]
+
+[node name="Camera" type="Camera3D" parent="."]
+script = ExtResource("camera")
