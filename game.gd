@@ -1,7 +1,7 @@
 extends Node3D
-# Runs the game: a timed round of grabbing prizes from a pile. The clock starts on the first
-# drop. When time runs out, a drop in progress finishes, and then the round is over. R plays
-# again. A prize counts when it falls through the chute.
+# Runs the game: a timed round of grabbing prizes from a pile. A click leaves the start screen,
+# and the clock starts on the first drop. When time runs out, a drop in progress finishes, and
+# then the round is over. A click plays again. A prize counts when it falls through the chute.
 #
 # Q locks the claw onto the prize nearest the mouse, until the attempt is over. You get one
 # per round.
@@ -19,6 +19,9 @@ const PILE := [
 @export var prize_level := -0.1 ## A prize below this height has gone through the chute.
 @export var round_seconds := 60.0 ## Length of a round.
 @export var auto_aims := 1 ## How many times Q works per round.
+@export var value_lighten := 0.3 ## Lightens the prize colors in the value list.
+@export var final_score_size := 0.09 ## Height of the final score, as a share of the window.
+@export var replay_delay := 1.5 ## Seconds before a click can restart, so the score gets read.
 
 @export_group("Easy")
 @export var easy_sway := 3.0 ## Claw sway damping.
@@ -28,19 +31,29 @@ const PILE := [
 @export var hard_sway := 0.8
 @export var hard_roll := 1.5
 
-var hard := false
+enum Phase { WAITING, PLAYING, OVER }
+
+# These survive the scene reload between rounds.
+static var hard := false
+static var play_again := false
+
+var phase := Phase.WAITING
 var score := 0
 var attempts := 0
 var time_left := 60.0
 var clock_running := false
-var round_over := false
+var over_seconds := 0.0
+var waiting_for_release := false
 var auto_aims_left := 1
 var pile: Array[RigidBody3D] = []
 
 @onready var label: Label = $UI/Status
-@onready var values: RichTextLabel = $UI/ValuePanel/Values
+@onready var values: RichTextLabel = $UI/Values
 @onready var final: Label = $UI/Final
+@onready var start_overlay: TextureRect = $UI/StartOverlay
+@onready var end_overlay: TextureRect = $UI/EndOverlay
 @onready var camera: Camera3D = $Camera
+@onready var marquee := $Cabinet/Marquee/Logo
 
 
 func _ready() -> void:
@@ -48,32 +61,47 @@ func _ready() -> void:
 	auto_aims_left = auto_aims
 	_show_values()
 	$Claw.drop_started.connect(_on_drop_started)
+	$Claw.drops_enabled = false
 	_spawn_pile()
+	if play_again:
+		play_again = false
+		_start_playing()
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed and not event.echo:
-		if event.keycode == KEY_R:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		if phase == Phase.WAITING:
+			_start_playing()
+		elif phase == Phase.OVER and over_seconds >= replay_delay:
+			play_again = true
 			get_tree().reload_current_scene()
-		elif event.keycode == KEY_TAB:
+	if event is InputEventKey and event.pressed and not event.echo:
+		if event.keycode == KEY_TAB:
 			hard = not hard
 			_apply_difficulty()
 			_show_score()
-		elif event.keycode == KEY_Q and auto_aims_left > 0 and not round_over:
+		elif event.keycode == KEY_Q and auto_aims_left > 0 and phase == Phase.PLAYING:
 			auto_aims_left -= 1
 			$Claw.auto_aim_target = _prize_near_mouse()
 			_show_score()
 
 
 func _physics_process(delta: float) -> void:
+	marquee.dimmed = clock_running
+	# The click that starts the game mustn't also drop the claw.
+	if waiting_for_release and not Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		waiting_for_release = false
+		$Claw.drops_enabled = true
+	if phase == Phase.OVER:
+		over_seconds += delta
 	if clock_running:
 		time_left = maxf(time_left - delta, 0.0)
 		if time_left <= 0.0:
 			clock_running = false
 			$Claw.drops_enabled = false
 		_show_score()
-	if not clock_running and time_left <= 0.0 and not round_over and $Claw.state == 0:
-		round_over = true
+	if not clock_running and time_left <= 0.0 and phase == Phase.PLAYING and $Claw.state == 0:
+		phase = Phase.OVER
 		_show_score()
 	for prize in pile.duplicate():
 		if prize.global_position.y < prize_level:
@@ -82,6 +110,12 @@ func _physics_process(delta: float) -> void:
 			_show_score()
 	if pile.is_empty():
 		_spawn_pile()
+
+
+func _start_playing() -> void:
+	phase = Phase.PLAYING
+	waiting_for_release = true
+	_show_score()
 
 
 func _spawn_pile() -> void:
@@ -132,17 +166,20 @@ func _apply_difficulty() -> void:
 
 
 func _show_score() -> void:
-	var level := "Hard" if hard else "Easy"
 	var lines := [
 		"Time: %d" % ceili(time_left),
 		"Score: %d" % score,
 		"Attempts: %d" % attempts,
 		"Auto-aim (Q): %d" % auto_aims_left,
-		"%s (Tab to change)" % level,
+		"Level: %s" % ("Hard" if hard else "Easy"),
 	]
 	label.text = "\n".join(lines)
-	final.visible = round_over
-	final.text = "Final score %d - Hit 'r' to restart" % score
+	start_overlay.visible = phase == Phase.WAITING
+	end_overlay.visible = phase == Phase.OVER
+	final.visible = phase == Phase.OVER
+	final.text = "Final score\n%d" % score
+	# The overlay image scales with the window, so the score has to as well.
+	final.add_theme_font_size_override("font_size", int(get_viewport().get_visible_rect().size.y * final_score_size))
 
 
 # Builds the table of prize values from the prizes themselves, so it can't go out of date.
@@ -151,7 +188,7 @@ func _show_values() -> void:
 	for entry in PILE:
 		var prize: RigidBody3D = entry[0].instantiate()
 		var mesh: Mesh = prize.get_node("Mesh").mesh
-		var color: Color = mesh.material.albedo_color
-		rows.append("[color=#%s]%s: %d[/color]" % [color.darkened(0.25).to_html(false), prize.prize_name, prize.value])
+		var color: Color = mesh.material.albedo_color.lightened(value_lighten)
+		rows.append("[right][color=#%s]%s: %d[/color][/right]" % [color.to_html(false), prize.prize_name, prize.value])
 		prize.free()
 	values.text = "\n".join(rows)

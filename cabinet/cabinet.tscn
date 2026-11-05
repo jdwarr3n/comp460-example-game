@@ -1,5 +1,8 @@
 [gd_scene format=3]
 
+[ext_resource type="Texture2D" path="res://cabinet/marquee_logo.png" id="marquee_logo"]
+[ext_resource type="Script" path="res://cabinet/marquee_scroll.gd" id="marquee_scroll"]
+
 [sub_resource type="StandardMaterial3D" id="body_material"]
 albedo_color = Color(0.42, 0.015, 0.035, 1)
 roughness = 0.6
@@ -41,10 +44,24 @@ albedo_color = Color(0.75, 0.88, 1, 0.1)
 roughness = 0.05
 
 [sub_resource type="StandardMaterial3D" id="marquee_material"]
-albedo_color = Color(1, 0.8, 0.25, 1)
+albedo_color = Color(0.01, 0.01, 0.015, 1)
+metallic_specular = 0.0
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="logo_material"]
+albedo_color = Color(0.01, 0.01, 0.015, 1)
+metallic_specular = 0.0
+roughness = 1.0
 emission_enabled = true
-emission = Color(1, 0.72, 0.2, 1)
-emission_energy_multiplier = 1.6
+emission = Color(1, 1, 1, 1)
+emission_energy_multiplier = 4.0
+emission_operator = 1
+emission_texture = ExtResource("marquee_logo")
+texture_filter = 5
+
+[sub_resource type="QuadMesh" id="logo_mesh"]
+material = SubResource("logo_material")
+size = Vector2(2.73, 0.2)
 
 [sub_resource type="BoxMesh" id="mesh_1"]
 material = SubResource("felt_material")
@@ -131,7 +148,7 @@ size = Vector3(0.2, 0.1, 0.2)
 
 [sub_resource type="BoxMesh" id="mesh_19"]
 material = SubResource("marquee_material")
-size = Vector3(2.5, 0.22, 0.01)
+size = Vector3(2.74, 0.22, 0.01)
 
 [sub_resource type="BoxMesh" id="mesh_20"]
 material = SubResource("glass_material")
@@ -463,6 +480,35 @@ mesh = SubResource("mesh_18")
 [node name="Marquee" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.55, 1.36)
 mesh = SubResource("mesh_19")
+
+[node name="Logo" type="MeshInstance3D" parent="Marquee"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.007)
+mesh = SubResource("logo_mesh")
+script = ExtResource("marquee_scroll")
+
+[node name="MarqueeBack" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 2.55, -1.36)
+mesh = SubResource("mesh_19")
+
+[node name="Logo" type="MeshInstance3D" parent="MarqueeBack"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.007)
+mesh = SubResource("logo_mesh")
+
+[node name="MarqueeLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -1.36, 2.55, 0)
+mesh = SubResource("mesh_19")
+
+[node name="Logo" type="MeshInstance3D" parent="MarqueeLeft"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.007)
+mesh = SubResource("logo_mesh")
+
+[node name="MarqueeRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 1.36, 2.55, 0)
+mesh = SubResource("mesh_19")
+
+[node name="Logo" type="MeshInstance3D" parent="MarqueeRight"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.007)
+mesh = SubResource("logo_mesh")
 
 [node name="GlassFront" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 1.2)

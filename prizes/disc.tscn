@@ -33,7 +33,7 @@ physics_material_override = SubResource("prize_physics")
 linear_damp = 0.4
 angular_damp = 5.0
 script = ExtResource("script")
-prize_name = "Gold coin"
+prize_name = "Coin"
 value = 10
 
 [node name="Mesh" type="MeshInstance3D" parent="."]

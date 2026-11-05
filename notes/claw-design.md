@@ -352,3 +352,34 @@ up outside the machine, so the shaft has a slanted yellow ramp at about 39 degre
 a real slot in the front. Won prizes tumble out and stay on the room floor. The old painted door
 was too small for the cube, so the slot is 0.55 wide and about 0.45 tall.
 Below the slot, a rectangular tray cut into the room floor collects the prizes.
+
+The marquee started as a blinking sign. I changed my mind while Claude was checking it: now
+"CLAW 460" scrolls right to left along a black panel and wraps, with glowing letters. On the way,
+the whole panel glowed white. Godot adds the emission color to the texture unless told to
+multiply, so a white color washed out the black.
+
+The letters looked a little fuzzy, so we cut the glow and the halo. The panel now runs around all
+four sides with four copies of the text. The sides all share one scrolling material, so a copy
+that leaves one side enters the next, and the text runs around the machine with no extra code.
+
+The sign looked so good it was distracting, so it now dims and slows down during a round and
+comes back to full when time runs out.
+
+I'd dropped zoom earlier because nobody needed it, but I wanted a close look at the coin. Now
+the scroll wheel zooms in on the point under the mouse and stops at the normal view on the way
+out. It narrows the lens instead of moving the camera, so the camera never passes through the
+glass.
+
+That finished materials and lighting. It took an hour, from 10 pm to 11 pm.
+
+For the UI, I first asked for a spinning Comp 460 and Click to start while waiting, with no R
+to restart. Once I saw it, I dropped the coin for a semi-transparent overlay with the title, the
+instructions, and Click to start. It's a single image that disappears when the game starts. In
+play, time, score, attempts, and auto-aim are upper left, and prize values are lower right. The
+camera still works on the start screen, so you can walk around
+the machine before playing. The click that starts the game could also have dropped the claw, so
+the claw waits for the button to come up first.
+
+The prize values moved to the upper right, without the white panel, which was distracting. They
+are the prize colors, lightened to show up against the dark, with a dark outline. The final score
+now uses the same panel and title as the start overlay.
