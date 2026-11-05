@@ -3,8 +3,6 @@
 These are the details behind the setup checklist in the Comp 460 email. Work through the
 steps in order. If any step doesn't make sense, ask Claude to explain it to you.
 
-Steps 1 to 4 have been tried on Windows; the rest have not been tested yet.
-
 ## Get set up
 
 ### Step 1: Get Claude
