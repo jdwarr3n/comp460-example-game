@@ -1,4 +1,4 @@
-# Draws the start and end overlays: start_overlay.png and end_overlay.png.
+# Draws the start and end overlays: overlay/start_overlay.png and overlay/end_overlay.png.
 # Run from the repo root: python tools/make_overlays.py
 # The final score and the difficulty line aren't drawn here: the game adds them, because they
 # change.
@@ -52,12 +52,12 @@ def start_overlay():
         y = 480 + 93 * row
         draw.text((740, y), key, font=key_font, fill=GOLD, anchor="rm")
         draw.text((800, y), action, font=text_font, fill=WHITE, anchor="lm")
-    image.save("start_overlay.png")
+    image.save("overlay/start_overlay.png")
 
 
 def end_overlay():
     image, _ = panel("Click to play again")
-    image.save("end_overlay.png")
+    image.save("overlay/end_overlay.png")
 
 
 if __name__ == "__main__":

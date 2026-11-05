@@ -8,7 +8,8 @@ toys later if that works out.
 
 The game is an arcade cabinet: a big box with transparent windows, a pile of prizes
 inside, and a prize chute in one corner. A claw hangs from the top on a cable. The
-player positions the claw, drops it, and tries to carry a prize to the chute.
+player positions the claw, drops it, and tries to carry a prize to the chute. Won prizes
+slide out of a slot in the front of the machine and pile up in a tray in the floor.
 
 ## Controls
 
@@ -23,9 +24,8 @@ player positions the claw, drops it, and tries to carry a prize to the chute.
   view.
 - **Tab:** switches between Easy and Hard on the start and end screens.
 - **Click:** starts from the start screen, and plays again after a round.
-- **Q:** auto-aim. The claw centers over the prize and ignores the mouse until the attempt is
-  over. A test tool for now, and maybe a secret cheat later. It locks onto the prize nearest
-  the mouse, so it works in a pile.
+- **Q:** auto-aim, once per round. The claw centers over the prize and ignores the mouse until
+  the attempt is over. It locks onto the prize nearest the mouse, so it works in a pile.
 
 ## Rules
 
@@ -38,7 +38,7 @@ get one auto-aim (Q) per round. A drop in progress when time runs out gets to fi
 | Cylinder | 2 | 9 |
 | Capsule | 2 | 8 |
 | Cube | 4 | 4 |
-| Gold coin | 10 | 2 |
+| Coin | 10 | 2 |
 
 Counts are about 1 / value.
 
@@ -71,8 +71,19 @@ Counts are about 1 / value.
 - **Glass top:** the roof is glass too, so the player can see the rails, gantry, and
   carriage. It also gives the player a straight-down view for judging aim. We don't point
   this out: players discover it by orbiting over the top.
-- **Tuning:** grip strength, claw speed, cable swing, and drop speed are settings in
-  Godot's Inspector, so they can be changed without touching code.
+- **Chute:** a real shaft through the base, with a yellow ramp that ends at a slot in the
+  front. A prize scores as it enters the shaft, then slides out into a tray cut into the room
+  floor and stays there until the next round.
+- **Screens:** a semi-transparent overlay with the title and instructions starts the game, and
+  a matching one shows the final score. Both have the difficulty line and a click prompt. The
+  camera works behind them.
+- **Marquee:** "CLAW 460" scrolls around all four sides of the cabinet in glowing letters, and
+  dims during a round.
+- **Sound:** music on the start and end screens, and one of two tracks at random during a round,
+  with fades on every change. Faint motors, collision sounds, and a soft tick for the last 10
+  seconds play only during a round.
+- **Tuning:** grip strength, claw speed, cable swing, drop speed, and sound levels are settings
+  in Godot's Inspector, so they can be changed without touching code.
 
 ## Reach
 
@@ -85,15 +96,6 @@ attempts, so prizes per attempt measures how hard it is.
 Easy and Hard differ in how much the physics is damped: Hard has more claw sway and a ball
 that rolls further. Tab switches between them on the start and end screens.
 
-Difficulty will likely be set by grip strength. Each difficulty level, or each machine,
-uses a different grip. Grip works in both directions: too weak and the prize slips out, too
-strong and the claw squeezes it out. The automated tests will show which values give an
-easy game and which give a hard one.
-
-A prize that might slip adds tension. Real machines grip hard to lift and then weaken the
-grip during the carry. We can do the same: after lifting, fade the grip by a random amount,
-tuned per difficulty, so a slip is a deliberate part of the game.
-
 ## Biggest risk
 
 The grip. A claw that really holds prizes through contact and friction can be finicky.
@@ -101,11 +103,13 @@ The game depends on two questions: can the claw pick up a ball at all, and how m
 does it take? We answer both first, in Phase 0. If real contact doesn't work, the fallback
 is to attach the prize to the claw with a joint that can break when shaken.
 
+Real contact worked, so the fallback was never needed.
+
 ## Phases
 
 Each phase ends with a done test, a screenshot, and a commit.
 
-**Phase 0: Grip test.** A claw and a ball on a plain floor, with no cabinet and no mouse
+**Phase 0: Grip test (done).** A claw and a ball on a plain floor, with no cabinet and no mouse
 aiming. This comes first so we reach the grab as soon as possible. Build it in small
 pieces, watching each one in Godot:
 
@@ -153,16 +157,31 @@ found in Phase 0. Add a counter that goes up when the ball lands in the chute.
 *Done when:* grabbing the ball feels good, it's possible but not guaranteed, and the
 counter works.
 
-**Phase 4: Other objects (built, being played).** Ball (red, 1), cylinder (blue, 3), capsule (purple, 3),
-cube (green, 10), and gold disc (100, close to impossible). Press N to skip to the next shape. Add other shapes, testing one at a time.
+**Phase 4: Other objects (done).** Add a cylinder, capsule, cube, and gold coin, testing one
+at a time. Rules has the final values.
 *Done when:* each new shape can be grabbed and dropped without strange behavior.
 
-**Phase 5: A pile (built, being played).** See Rules. Fill the cabinet with a pile of objects.
+**Phase 5: A pile (done).** See Rules. Fill the cabinet with a pile of objects.
 *Done when:* the pile settles without jitter, and the game still runs smoothly and plays
 well.
 
-**Polish (in progress).** Materials and lighting are done: gold coins, materials and reflections, a real chute with a ramp, front slot, and prize tray, a scrolling marquee that dims during a round, and scroll wheel zoom. The start screen and in-game display are built: a semi-transparent overlay with the title, instructions, and Click to start, then time, score, attempts, auto-aim, and level upper left, and prize values upper right. Sound is done too: motors, collisions, a soft countdown, and music.
+**Polish (done).**
 
-**Later phases.** Better UI (Tab is a stand-in
-for the difficulty setting), menus, sound, better arcade-style visuals, more kinds of objects, plush
-toys, and several machines as levels.
+- **Materials and lighting:** stamped gold coins, new materials and reflections, and tile floor.
+- **Chute:** a real shaft with a ramp, front slot, and prize tray.
+- **Marquee:** scrolling text on all four sides, dimmed during a round.
+- **Camera:** scroll wheel zoom.
+- **UI:** start and end overlays, with time, score, attempts, auto-aim, and level upper left, and
+  prize values upper right. Difficulty changes between games.
+- **Sound:** music, motors, collisions, and a soft countdown.
+
+**Later phases.** More kinds of objects, plush toys, and several machines as levels.
+
+Difficulty could also come from grip strength, with each level or machine using a different
+grip. Grip works in both directions: too weak and the prize slips out, too strong and the claw
+squeezes it out. Automated tests would show which values give an easy game and which give a hard
+one.
+
+A prize that might slip adds tension. Real machines grip hard to lift and then weaken the grip
+during the carry. We could do the same: after lifting, fade the grip by a random amount, tuned
+per difficulty, so a slip is a deliberate part of the game.

@@ -3,14 +3,13 @@
 These are the details behind the setup checklist in the Comp 460 email. Work through the
 steps in order. If any step doesn't make sense, ask Claude to explain it to you.
 
-These notes are still being written. Steps 1 to 4 have been tried on Windows; the rest
-have not been tested yet.
+Steps 1 to 4 have been tried on Windows; the rest have not been tested yet.
 
 ## Get set up
 
 ### Step 1: Get Claude
 
-Use a Claude Pro subscription or your Rice account, as the email explains.
+Buy a Claude Pro subscription and keep your receipts, as the email explains.
 
 ### Step 2: Visit Claude chat
 
@@ -78,7 +77,14 @@ this kind of install. Reload VS Code if the extension doesn't show up.
 
 ### Step 7: Install Git and make a GitHub account
 
-Ask Claude Code to help install Git on your computer, then make a GitHub account.
+Ask Claude Code to help install Git on your computer, then make a GitHub account at
+[github.com](https://github.com). Use your Rice email, and sign up for the
+[GitHub Student Developer Pack](https://education.github.com/pack), which includes free private
+repositories and a lot else.
+
+Then type this in the Claude panel:
+
+> Set my Git name and email, and help me sign in to GitHub so you can clone and push for me.
 
 ## Try the example game
 
@@ -119,3 +125,23 @@ Each teammate clones it, makes one small change, and pushes, then pulls the othe
 changes.
 
 You are done when every member of your team has a commit in the team repo.
+
+## Good to know
+
+**Why Godot?** It gives you the game infrastructure you should not be rebuilding: a scene system,
+physics, input, audio, and a renderer. It leaves the game itself for you to write. It's free, open
+source, and small enough to learn in a weekend, and its scripting language, GDScript, reads like
+Python. To learn more, work through the
+[Getting Started](https://docs.godotengine.org/en/stable/getting_started/introduction/index.html)
+section of the official docs.
+
+**Why Git?** Employers expect to see it, and it's the only sane way for a team to work on one
+codebase. It also protects you, because a laptop dies in April every year. If you've never used
+it, don't worry: tell Claude to set up the repository, tell it to commit when you finish
+something, and tell it what to do when two of you edit the same file.
+
+**The `.godot/` folder.** Make sure it's in your `.gitignore`, since it's generated and large.
+Claude will know.
+
+**API keys.** Never put an API key inside a game you distribute. Anything in the game is public
+the day you ship.

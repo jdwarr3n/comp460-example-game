@@ -24,3 +24,9 @@ mono_crash.*.json
 # Uncomment if your project does not version PCK files as runtime dependencies.
 # *.pck
 
+# Python build files
+__pycache__/
+
+# Raw music recordings, kept locally
+audio/claw-*.mp3
+audio/claw-*.mp3.import

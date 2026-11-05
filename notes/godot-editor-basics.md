@@ -34,8 +34,11 @@ fly. The mouse wheel zooms.
 **Stop the game, press Ctrl+S, then press F5.** Don't rely on Play to save your changes, or
 you may run an older version without noticing.
 
-Press **F5** or the Play button to run the game. Close the game window to stop it. If something goes
-wrong, look in the Output panel, and paste any error into Claude.
+Press **F5** or the Play button to run the game. Close the game window to stop it. If something
+goes wrong, look in the Output panel, and paste any error into Claude.
+
+After files change, Godot may ask to reload. If Play turns blue and nothing happens, press it
+again.
 
 ## Four words to know
 

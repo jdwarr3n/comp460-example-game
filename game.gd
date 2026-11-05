@@ -14,7 +14,7 @@ const PILE := [
 	[preload("res://prizes/cylinder.tscn"), 9],
 	[preload("res://prizes/capsule.tscn"), 8],
 	[preload("res://prizes/cube.tscn"), 4],
-	[preload("res://prizes/disc.tscn"), 2],
+	[preload("res://prizes/coin.tscn"), 2],
 ]
 
 ## One is picked at random for each round.

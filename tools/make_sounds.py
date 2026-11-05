@@ -1,8 +1,7 @@
 # Generates the game's sounds as WAV files in audio/.
-# Run from the repo root: python tools/make_sounds.py [preview_file]
+# Run from the repo root: python tools/make_sounds.py
 # Everything is synthesized here, so there's nothing to license. Loops are built from whole
 # cycles of the loop length, so they repeat with no click at the seam.
-import sys
 import wave
 from pathlib import Path
 
@@ -99,26 +98,6 @@ def countdown_tick():
     return 0.7 * sound * attack / np.max(np.abs(sound))
 
 
-def hits_preview(soft, plastic, metal):
-    # Each hit at three strengths, then a pile settling.
-    length = int(7.0 * RATE)
-    track = np.zeros(length)
-
-    def place(sound, seconds, level):
-        start = int(seconds * RATE)
-        end = min(start + len(sound), length)
-        track[start:end] += level * sound[: end - start]
-
-    for row, sound in enumerate((soft, plastic, metal)):
-        for strength, level in enumerate((1.0, 0.5, 0.2)):
-            place(sound, 0.1 + row * 1.3 + strength * 0.4, level)
-    rng = np.random.default_rng(7)
-    for _ in range(40):
-        sound = (soft, plastic, plastic, metal)[rng.integers(4)]
-        place(sound, 4.2 + 2.0 * rng.random() ** 2, rng.uniform(0.05, 0.4))
-    return 0.9 * track / np.max(np.abs(track))
-
-
 def save(path, sound):
     data = (np.clip(sound, -1.0, 1.0) * 32767.0).astype(np.int16)
     with wave.open(str(path), "wb") as file:
@@ -128,28 +107,14 @@ def save(path, sound):
         file.writeframes(data.tobytes())
 
 
-def play_for(sound, seconds):
-    # A faded copy for listening outside the game.
-    count = int(seconds * RATE)
-    clip = np.resize(sound, count)
-    fade = np.minimum(1.0, np.minimum(np.arange(count), count - np.arange(count)) / (0.15 * RATE))
-    return clip * fade
-
-
 def main():
     Path("audio").mkdir(exist_ok=True)
     save("audio/motor_carriage.wav", carriage_motor())
     save("audio/motor_cable.wav", cable_motor())
-    soft, plastic, metal = hit_soft(), hit_plastic(), hit_metal()
-    save("audio/hit_soft.wav", soft)
-    save("audio/hit_plastic.wav", plastic)
-    save("audio/hit_metal.wav", metal)
-    tick = countdown_tick()
-    save("audio/countdown_tick.wav", tick)
-    if len(sys.argv) > 1:
-        second = np.zeros(RATE)
-        second[: len(tick)] = tick
-        save(sys.argv[1], np.tile(second, 5))
+    save("audio/hit_soft.wav", hit_soft())
+    save("audio/hit_plastic.wav", hit_plastic())
+    save("audio/hit_metal.wav", hit_metal())
+    save("audio/countdown_tick.wav", countdown_tick())
 
 
 if __name__ == "__main__":

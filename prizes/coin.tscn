@@ -27,7 +27,7 @@ height = 0.05
 friction = 0.8
 bounce = 0.1
 
-[node name="Disc" type="RigidBody3D"]
+[node name="Coin" type="RigidBody3D"]
 mass = 0.2
 physics_material_override = SubResource("prize_physics")
 linear_damp = 0.4

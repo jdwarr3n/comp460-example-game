@@ -4,7 +4,7 @@ A 3D arcade claw machine built in Godot 4 with GDScript, as an example for Comp 
 lasts 60 seconds, and the player grabs as many prizes as possible from a pile.
 
 Read `notes/claw-plan.md` for what the game is and what's next, and `notes/claw-design.md`
-for how and why it was built this way.
+for how and why it was built this way. `notes/claw-build-log.md` has the full record.
 
 ## Layout
 
@@ -12,15 +12,18 @@ for how and why it was built this way.
 - `cabinet/`: the machine.
 - `claw/`: the claw, cable, carriage movement, and the drop sequence.
 - `camera/`: the camera on a sphere around the cabinet.
-- `prizes/`: one scene per prize, with its value.
+- `prizes/`: one scene per prize, with its value, and the collision sounds.
+- `overlay/`: the start and end screen images.
+- `audio/`: music and sound effects.
+- `tools/`: Python scripts that generate the textures, overlays, and sound effects.
 - `grip_test/`: the original grip test, kept as a separate scene.
-- `notes/`: setup notes, the plan, the design notes, and Godot Editor basics.
+- `notes/`: setup notes, the plan, the design notes, the build log, and Godot Editor basics.
 - `bloopers/`: videos of funny physics.
 
 ## How we work
 
 - Plan first. Build one small piece at a time, so the change can be seen in Godot.
-- Update `notes/claw-plan.md` and `notes/claw-design.md` as decisions are made.
+- Update `notes/claw-plan.md` and `notes/claw-build-log.md` as decisions are made.
 - Keep tuning values in `@export` variables, so they can be changed in the Inspector.
 - Check your own work. Run the game from the command line, print key values, and look at a
   screenshot. Say what you tested and what you didn't.
