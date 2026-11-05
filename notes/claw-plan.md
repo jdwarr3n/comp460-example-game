@@ -21,7 +21,7 @@ player positions the claw, drops it, and tries to carry a prize to the chute.
 - **Arrow keys or WASD:** orbit the camera around the cabinet.
 - **Scroll wheel:** zooms in on the point under the mouse, and back out as far as the starting
   view.
-- **Tab:** switches between Easy and Hard.
+- **Tab:** switches between Easy and Hard on the start and end screens.
 - **Click:** starts from the start screen, and plays again after a round.
 - **Q:** auto-aim. The claw centers over the prize and ignores the mouse until the attempt is
   over. A test tool for now, and maybe a secret cheat later. It locks onto the prize nearest
@@ -83,7 +83,7 @@ attempts, so prizes per attempt measures how hard it is.
 ## Difficulty
 
 Easy and Hard differ in how much the physics is damped: Hard has more claw sway and a ball
-that rolls further. Tab switches between them during play.
+that rolls further. Tab switches between them on the start and end screens.
 
 Difficulty will likely be set by grip strength. Each difficulty level, or each machine,
 uses a different grip. Grip works in both directions: too weak and the prize slips out, too
@@ -161,7 +161,7 @@ cube (green, 10), and gold disc (100, close to impossible). Press N to skip to t
 *Done when:* the pile settles without jitter, and the game still runs smoothly and plays
 well.
 
-**Polish (in progress).** Materials and lighting are done: gold coins, materials and reflections, a real chute with a ramp, front slot, and prize tray, a scrolling marquee that dims during a round, and scroll wheel zoom. The start screen and in-game display are built: a semi-transparent overlay with the title, instructions, and Click to start, then time, score, attempts, auto-aim, and level upper left, and prize values upper right. Next: replace Tab with a difficulty choice, then sound.
+**Polish (in progress).** Materials and lighting are done: gold coins, materials and reflections, a real chute with a ramp, front slot, and prize tray, a scrolling marquee that dims during a round, and scroll wheel zoom. The start screen and in-game display are built: a semi-transparent overlay with the title, instructions, and Click to start, then time, score, attempts, auto-aim, and level upper left, and prize values upper right. Sound is done too: motors, collisions, a soft countdown, and music.
 
 **Later phases.** Better UI (Tab is a stand-in
 for the difficulty setting), menus, sound, better arcade-style visuals, more kinds of objects, plush

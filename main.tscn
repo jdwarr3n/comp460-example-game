@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" path="res://end_overlay.png" id="end_overlay"]
 [ext_resource type="AudioStream" path="res://audio/music_between.wav" id="music_start"]
 [ext_resource type="AudioStream" path="res://audio/countdown_tick.wav" id="countdown_tick"]
+[ext_resource type="Script" path="res://prizes/hit_sounds.gd" id="hit_sounds"]
 [ext_resource type="Texture2D" path="res://cabinet/reflection_room.png" id="reflection_room"]
 [ext_resource type="Texture2D" path="res://cabinet/floor_tile.png" id="floor_tile"]
 [ext_resource type="Texture2D" path="res://cabinet/floor_tile_normal.png" id="floor_tile_normal"]
@@ -150,6 +151,9 @@ stream = ExtResource("music_start")
 [node name="CountdownTick" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("countdown_tick")
 
+[node name="HitSounds" type="Node" parent="."]
+script = ExtResource("hit_sounds")
+
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="Status" type="Label" parent="UI"]
@@ -197,6 +201,14 @@ texture = ExtResource("end_overlay")
 expand_mode = 1
 stretch_mode = 5
 mouse_filter = 2
+
+[node name="Difficulty" type="Label" parent="UI"]
+visible = false
+anchors_preset = 10
+anchor_right = 1.0
+horizontal_alignment = 1
+vertical_alignment = 1
+theme_override_colors/font_color = Color(1, 0.8, 0.27, 1)
 
 [node name="Final" type="Label" parent="UI"]
 visible = false

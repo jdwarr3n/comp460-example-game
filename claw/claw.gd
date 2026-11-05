@@ -53,6 +53,7 @@ var cable_length := 0.0
 var target := Vector3.ZERO ## Where the carriage is heading.
 var mouse_aim := true
 var drop_held := false ## Lets a test hold the drop button.
+var motors_on := true ## The game turns the motor sounds off between rounds.
 var drops_enabled := true ## The game turns this off when the round is over.
 var auto_aim_target: Node3D = null ## While set, the claw follows this and ignores the mouse.
 
@@ -71,6 +72,8 @@ var _floor := Plane(Vector3.UP, 0.0)
 var _timer := 0.0
 var _home := Vector3.ZERO
 var _last_cable_length := 0.0
+var _hit_sounds: Node = null
+var _part_speeds := {}
 
 
 func _ready() -> void:
@@ -80,6 +83,11 @@ func _ready() -> void:
 	_home = carriage.global_position
 	hub.linear_damp = sway_damping
 	_set_fingers(-close_speed, OPEN_STRENGTH)
+	_hit_sounds = get_tree().current_scene.get_node_or_null("HitSounds")
+	for part: RigidBody3D in [hub, $FingerA, $FingerB, $FingerC]:
+		part.contact_monitor = true
+		part.max_contacts_reported = 4
+		part.body_entered.connect(_on_claw_hit.bind(part))
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -98,9 +106,11 @@ func _physics_process(delta: float) -> void:
 	var carriage_velocity := (carriage.global_position - before) / delta
 	_apply_cable(cable_rate, carriage_velocity, delta)
 	_tilt_claw()
-	_set_motor(carriage_sound, carriage_velocity.length() > 0.02, delta)
-	_set_motor(cable_sound, cable_length != _last_cable_length, delta)
+	_set_motor(carriage_sound, motors_on and carriage_velocity.length() > 0.02, delta)
+	_set_motor(cable_sound, motors_on and cable_length != _last_cable_length, delta)
 	_last_cable_length = cable_length
+	for part in [hub, $FingerA, $FingerB, $FingerC]:
+		_part_speeds[part] = part.linear_velocity.length()
 
 
 func _process(_delta: float) -> void:
@@ -220,6 +230,12 @@ func _set_fingers(speed: float, strength: float) -> void:
 		hinge.set_flag(HingeJoint3D.FLAG_ENABLE_MOTOR, true)
 		hinge.set_param(HingeJoint3D.PARAM_MOTOR_TARGET_VELOCITY, speed)
 		hinge.set_param(HingeJoint3D.PARAM_MOTOR_MAX_IMPULSE, strength)
+
+
+# Prizes make their own sound when the claw hits them, so this is for the cabinet.
+func _on_claw_hit(body: Node, part: RigidBody3D) -> void:
+	if _hit_sounds != null and body is StaticBody3D:
+		_hit_sounds.hit("metal", _part_speeds.get(part, 0.0))
 
 
 func _set_motor(player: AudioStreamPlayer, running: bool, delta: float) -> void:

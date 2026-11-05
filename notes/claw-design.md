@@ -398,3 +398,7 @@ I made the music with a free account on an AI soundtrack tool and grabbed the tr
 Capture extension. Claude then edited the recordings, cutting each track out and removing the
 silence around it.
 The music fades in and out at both ends of each track, and when the screens change.
+Motors and collision sounds only play during a round. Collisions get louder with harder hits, and
+only a few play at once, so the pile stays quiet behind the start screen.
+
+Difficulty now changes only between games, on the start and end screens, not during a round.

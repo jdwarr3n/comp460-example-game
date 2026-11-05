@@ -5,7 +5,8 @@ extends Node3D
 #
 # Q locks the claw onto the prize nearest the mouse, until the attempt is over. You get one
 # per round.
-# Difficulty is how much the physics is damped. Tab switches between Easy and Hard.
+# Difficulty is how much the physics is damped. Tab switches between Easy and Hard on the start
+# and end screens.
 
 ## How many of each prize are in a pile: about 1 / value.
 const PILE := [
@@ -24,6 +25,8 @@ const GAME_TRACKS := [preload("res://audio/music_game_a.wav"), preload("res://au
 @export var auto_aims := 1 ## How many times Q works per round.
 @export var value_lighten := 0.3 ## Lightens the prize colors in the value list.
 @export var final_score_size := 0.09 ## Height of the final score, as a share of the window.
+@export var difficulty_size := 0.032 ## Height of the difficulty line, as a share of the window.
+@export var difficulty_line_offset := 400.0 ## Below the overlay's center, in overlay pixels.
 @export var music_volume_db := -24.0
 @export var music_fade_seconds := 1.0 ## Length of every music fade.
 @export var replay_fade_speed := 3.0 ## Speeds up the fade after a click to play again.
@@ -62,12 +65,14 @@ var pile: Array[RigidBody3D] = []
 @onready var label: Label = $UI/Status
 @onready var values: RichTextLabel = $UI/Values
 @onready var final: Label = $UI/Final
+@onready var difficulty: Label = $UI/Difficulty
 @onready var start_overlay: TextureRect = $UI/StartOverlay
 @onready var end_overlay: TextureRect = $UI/EndOverlay
 @onready var camera: Camera3D = $Camera
 @onready var start_music: AudioStreamPlayer = $StartMusic
 @onready var game_music: AudioStreamPlayer = $GameMusic
 @onready var countdown_tick: AudioStreamPlayer = $CountdownTick
+@onready var hit_sounds: Node = $HitSounds
 @onready var marquee := $Cabinet/Marquee/Logo
 
 
@@ -76,6 +81,7 @@ func _ready() -> void:
 	auto_aims_left = auto_aims
 	_show_values()
 	$Claw.drop_started.connect(_on_drop_started)
+	get_viewport().size_changed.connect(_show_score)
 	$Claw.drops_enabled = false
 	countdown_tick.volume_db = countdown_volume_db
 	game_music.stream = GAME_TRACKS.pick_random()
@@ -92,7 +98,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		elif phase == Phase.OVER and over_seconds >= replay_delay:
 			leaving = true
 	if event is InputEventKey and event.pressed and not event.echo:
-		if event.keycode == KEY_TAB:
+		if event.keycode == KEY_TAB and phase != Phase.PLAYING:
 			hard = not hard
 			_apply_difficulty()
 			_show_score()
@@ -104,6 +110,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _physics_process(delta: float) -> void:
 	marquee.dimmed = clock_running
+	$Claw.motors_on = phase == Phase.PLAYING
+	hit_sounds.enabled = phase == Phase.PLAYING
 	_update_music(delta)
 	# The click that starts the game mustn't also drop the claw.
 	if waiting_for_release and not Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
@@ -226,8 +234,15 @@ func _show_score() -> void:
 	end_overlay.visible = phase == Phase.OVER
 	final.visible = phase == Phase.OVER
 	final.text = "Final score\n%d" % score
-	# The overlay image scales with the window, so the score has to as well.
-	final.add_theme_font_size_override("font_size", int(get_viewport().get_visible_rect().size.y * final_score_size))
+	difficulty.visible = phase != Phase.PLAYING
+	difficulty.text = "Difficulty: %s  (Tab to change)" % ("Hard" if hard else "Easy")
+	# The overlay image scales with the window, so the text on it has to as well.
+	var window := get_viewport().get_visible_rect().size
+	final.add_theme_font_size_override("font_size", int(window.y * final_score_size))
+	difficulty.add_theme_font_size_override("font_size", int(window.y * difficulty_size))
+	var picture := start_overlay.texture.get_size()
+	var scale_to_window := minf(start_overlay.size.x / picture.x, start_overlay.size.y / picture.y)
+	difficulty.position.y = window.y / 2.0 + difficulty_line_offset * scale_to_window - difficulty.size.y / 2.0
 
 
 # Builds the table of prize values from the prizes themselves, so it can't go out of date.

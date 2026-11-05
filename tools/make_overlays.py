@@ -1,6 +1,7 @@
 # Draws the start and end overlays: start_overlay.png and end_overlay.png.
 # Run from the repo root: python tools/make_overlays.py
-# The final score isn't drawn here: the game puts it in the middle of the end overlay.
+# The final score and the difficulty line aren't drawn here: the game adds them, because they
+# change.
 from PIL import Image, ImageDraw, ImageFont
 
 WIDTH, HEIGHT = 1600, 1400
@@ -19,7 +20,6 @@ CONTROLS = [
     ("Arrows or WASD", "Orbit the camera"),
     ("Scroll wheel", "Zoom in and out"),
     ("Q", "Auto-aim, once per round"),
-    ("Tab", "Switch Easy and Hard"),
 ]
 
 
