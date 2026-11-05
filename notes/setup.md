@@ -38,14 +38,13 @@ Stuck? Ask [Claude chat](https://claude.ai), and paste in any error message.
 3. Install **Claude Code for VS Code**, and check that the publisher is **Anthropic**.
    Other extensions have similar names.
 4. Open a folder with **File > Open Folder**, then open a file.
-5. Click the orange asterisk at the top right.
+5. Click the **Claude Code** button at the lower right of the window. It opens a Claude tab.
 6. Sign in with your Claude account in the browser window that opens.
 
-**No orange asterisk?** Look for a **Restricted Mode** message or button at the lower
+**No Claude Code button?** Look for a **Restricted Mode** message or button at the lower
 left. Click it and switch to trusted mode. Claude Code doesn't appear in Restricted Mode.
 
-**Still no asterisk?** This always works: choose **View > Command Palette**, then
-**Claude Code: Open in New Tab**.
+**Still no button?** Click the orange asterisk at the top right of the file window.
 
 Stuck? Ask [Claude chat](https://claude.ai), and paste in any error message.
 

@@ -39,9 +39,9 @@ Claude suggested reordering the steps to reach that test first: a claw and a bal
 floor, with no cabinet and no mouse aiming. If it had failed, I'd have lost very little.
 
 Skill can be measured too. A good game needs a curve: a careful player should usually succeed,
-and a careless one should usually fail. Twelve test grabs showed that direction mattered more
-than distance. Aiming between two fingers worked well off center, while aiming toward a finger
-failed even when nearly centered.
+and a careless one should usually fail. Twelve test grabs showed that the direction of a miss
+mattered more than its size. The claw has three prongs. A ball slightly off center could still be
+grabbed if it sat in the gap between two prongs, but a prong coming down on it knocked it away.
 
 ## Lessons from the build
 
