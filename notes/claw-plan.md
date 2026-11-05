@@ -185,3 +185,7 @@ one.
 A prize that might slip adds tension. Real machines grip hard to lift and then weaken the grip
 during the carry. We could do the same: after lifting, fade the grip by a random amount, tuned
 per difficulty, so a slip is a deliberate part of the game.
+
+Each prize captured could add 5 seconds to the clock, the same for every prize. The score
+already rewards valuable prizes. Show a small "+5" by the timer, so the player sees why the clock
+jumped. A drop that finishes after time runs out still scores, but it doesn't restart the clock.
