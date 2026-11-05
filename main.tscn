@@ -6,6 +6,8 @@
 [ext_resource type="Script" path="res://camera/orbit_camera.gd" id="camera"]
 [ext_resource type="Texture2D" path="res://start_overlay.png" id="start_overlay"]
 [ext_resource type="Texture2D" path="res://end_overlay.png" id="end_overlay"]
+[ext_resource type="AudioStream" path="res://audio/music_between.wav" id="music_start"]
+[ext_resource type="AudioStream" path="res://audio/countdown_tick.wav" id="countdown_tick"]
 [ext_resource type="Texture2D" path="res://cabinet/reflection_room.png" id="reflection_room"]
 [ext_resource type="Texture2D" path="res://cabinet/floor_tile.png" id="floor_tile"]
 [ext_resource type="Texture2D" path="res://cabinet/floor_tile_normal.png" id="floor_tile_normal"]
@@ -139,6 +141,14 @@ fov = 38.0
 script = ExtResource("camera")
 
 [node name="Claw" parent="." instance=ExtResource("claw")]
+
+[node name="StartMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("music_start")
+
+[node name="GameMusic" type="AudioStreamPlayer" parent="."]
+
+[node name="CountdownTick" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("countdown_tick")
 
 [node name="UI" type="CanvasLayer" parent="."]
 

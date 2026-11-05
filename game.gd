@@ -16,11 +16,19 @@ const PILE := [
 	[preload("res://prizes/disc.tscn"), 2],
 ]
 
+## One is picked at random for each round.
+const GAME_TRACKS := [preload("res://audio/music_game_a.wav"), preload("res://audio/music_game_b.wav")]
+
 @export var prize_level := -0.1 ## A prize below this height has gone through the chute.
 @export var round_seconds := 60.0 ## Length of a round.
 @export var auto_aims := 1 ## How many times Q works per round.
 @export var value_lighten := 0.3 ## Lightens the prize colors in the value list.
 @export var final_score_size := 0.09 ## Height of the final score, as a share of the window.
+@export var music_volume_db := -24.0
+@export var music_fade_seconds := 1.0 ## Length of every music fade.
+@export var replay_fade_speed := 3.0 ## Speeds up the fade after a click to play again.
+@export var countdown_seconds := 10 ## A soft tick each second for this long at the end of a round.
+@export var countdown_volume_db := -22.0
 @export var replay_delay := 1.5 ## Seconds before a click can restart, so the score gets read.
 
 @export_group("Easy")
@@ -44,6 +52,10 @@ var time_left := 60.0
 var clock_running := false
 var over_seconds := 0.0
 var waiting_for_release := false
+var last_tick_second := 0
+var start_mix := 0.0
+var game_mix := 0.0
+var leaving := false
 var auto_aims_left := 1
 var pile: Array[RigidBody3D] = []
 
@@ -53,6 +65,9 @@ var pile: Array[RigidBody3D] = []
 @onready var start_overlay: TextureRect = $UI/StartOverlay
 @onready var end_overlay: TextureRect = $UI/EndOverlay
 @onready var camera: Camera3D = $Camera
+@onready var start_music: AudioStreamPlayer = $StartMusic
+@onready var game_music: AudioStreamPlayer = $GameMusic
+@onready var countdown_tick: AudioStreamPlayer = $CountdownTick
 @onready var marquee := $Cabinet/Marquee/Logo
 
 
@@ -62,6 +77,8 @@ func _ready() -> void:
 	_show_values()
 	$Claw.drop_started.connect(_on_drop_started)
 	$Claw.drops_enabled = false
+	countdown_tick.volume_db = countdown_volume_db
+	game_music.stream = GAME_TRACKS.pick_random()
 	_spawn_pile()
 	if play_again:
 		play_again = false
@@ -73,8 +90,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		if phase == Phase.WAITING:
 			_start_playing()
 		elif phase == Phase.OVER and over_seconds >= replay_delay:
-			play_again = true
-			get_tree().reload_current_scene()
+			leaving = true
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.keycode == KEY_TAB:
 			hard = not hard
@@ -88,6 +104,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _physics_process(delta: float) -> void:
 	marquee.dimmed = clock_running
+	_update_music(delta)
 	# The click that starts the game mustn't also drop the claw.
 	if waiting_for_release and not Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		waiting_for_release = false
@@ -96,6 +113,7 @@ func _physics_process(delta: float) -> void:
 		over_seconds += delta
 	if clock_running:
 		time_left = maxf(time_left - delta, 0.0)
+		_tick_countdown()
 		if time_left <= 0.0:
 			clock_running = false
 			$Claw.drops_enabled = false
@@ -116,6 +134,36 @@ func _start_playing() -> void:
 	phase = Phase.PLAYING
 	waiting_for_release = true
 	_show_score()
+
+
+func _tick_countdown() -> void:
+	var second := ceili(time_left)
+	if second <= countdown_seconds and second > 0 and second != last_tick_second:
+		last_tick_second = second
+		countdown_tick.play()
+
+
+func _update_music(delta: float) -> void:
+	var in_round := phase == Phase.PLAYING
+	var step := delta * (replay_fade_speed if leaving else 1.0)
+	start_mix = _mix_track(start_music, start_mix, not in_round and not leaving, step)
+	game_mix = _mix_track(game_music, game_mix, in_round and not leaving, step)
+	if leaving and start_mix <= 0.0 and game_mix <= 0.0:
+		play_again = true
+		get_tree().reload_current_scene.call_deferred()
+
+
+# Fades a track in and out when it's wanted or not, and at both ends of its loop.
+func _mix_track(player: AudioStreamPlayer, mix: float, wanted: bool, delta: float) -> float:
+	mix = move_toward(mix, 1.0 if wanted else 0.0, delta / music_fade_seconds)
+	if wanted and not player.playing:
+		player.play()
+	elif mix <= 0.0 and player.playing:
+		player.stop()
+	var position := player.get_playback_position()
+	var edge := minf(position, player.stream.get_length() - position) / music_fade_seconds
+	player.volume_linear = db_to_linear(music_volume_db) * mix * clampf(edge, 0.0, 1.0)
+	return mix
 
 
 func _spawn_pile() -> void:

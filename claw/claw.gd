@@ -42,6 +42,10 @@ enum State { READY, LOWERING, CLOSING, LIFTING, TO_CHUTE, SETTLING, OPENING, RET
 @export var tilt_follow := 6.0 ## How quickly the claw tilts to line up with the cable.
 @export var sway_damping := 3.0 ## How quickly the swing dies down. Higher settles faster.
 
+@export_group("Sound")
+@export var motor_volume_db := -42.0 ## How loud the motors are while running. Very faint.
+@export var motor_fade := 10.0 ## How quickly a motor sound starts and stops, per second.
+
 const OPEN_STRENGTH := 5.0
 
 var state := State.READY
@@ -59,11 +63,14 @@ var auto_aim_target: Node3D = null ## While set, the claw follows this and ignor
 @onready var cable: MeshInstance3D = $Cable
 @onready var marker: MeshInstance3D = $Marker
 @onready var hinges: Array[HingeJoint3D] = [$HingeA, $HingeB, $HingeC]
+@onready var carriage_sound: AudioStreamPlayer = $CarriageSound
+@onready var cable_sound: AudioStreamPlayer = $CableSound
 
 var _cable_mesh := ImmediateMesh.new()
 var _floor := Plane(Vector3.UP, 0.0)
 var _timer := 0.0
 var _home := Vector3.ZERO
+var _last_cable_length := 0.0
 
 
 func _ready() -> void:
@@ -91,6 +98,9 @@ func _physics_process(delta: float) -> void:
 	var carriage_velocity := (carriage.global_position - before) / delta
 	_apply_cable(cable_rate, carriage_velocity, delta)
 	_tilt_claw()
+	_set_motor(carriage_sound, carriage_velocity.length() > 0.02, delta)
+	_set_motor(cable_sound, cable_length != _last_cable_length, delta)
+	_last_cable_length = cable_length
 
 
 func _process(_delta: float) -> void:
@@ -210,6 +220,12 @@ func _set_fingers(speed: float, strength: float) -> void:
 		hinge.set_flag(HingeJoint3D.FLAG_ENABLE_MOTOR, true)
 		hinge.set_param(HingeJoint3D.PARAM_MOTOR_TARGET_VELOCITY, speed)
 		hinge.set_param(HingeJoint3D.PARAM_MOTOR_MAX_IMPULSE, strength)
+
+
+func _set_motor(player: AudioStreamPlayer, running: bool, delta: float) -> void:
+	var full := db_to_linear(motor_volume_db)
+	var level := full if running else 0.0
+	player.volume_linear = move_toward(player.volume_linear, level, motor_fade * full * delta)
 
 
 func _draw_cable() -> void:

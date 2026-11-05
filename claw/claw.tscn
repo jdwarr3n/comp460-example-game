@@ -2,6 +2,9 @@
 
 [ext_resource type="Script" path="res://claw/claw.gd" id="script"]
 
+[ext_resource type="AudioStream" path="res://audio/motor_carriage.wav" id="motor_carriage"]
+[ext_resource type="AudioStream" path="res://audio/motor_cable.wav" id="motor_cable"]
+
 [sub_resource type="StandardMaterial3D" id="metal_material"]
 albedo_color = Color(0.92, 0.93, 0.96, 1)
 metallic = 1.0
@@ -58,6 +61,16 @@ bounce = 0.0
 
 [node name="Claw" type="Node3D"]
 script = ExtResource("script")
+
+[node name="CarriageSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("motor_carriage")
+volume_db = -80.0
+autoplay = true
+
+[node name="CableSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("motor_cable")
+volume_db = -80.0
+autoplay = true
 
 [node name="Cable" type="MeshInstance3D" parent="."]
 material_override = SubResource("cable_material")

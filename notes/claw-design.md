@@ -383,3 +383,18 @@ the claw waits for the button to come up first.
 The prize values moved to the upper right, without the white panel, which was distracting. They
 are the prize colors, lightened to show up against the dark, with a dark outline. The final score
 now uses the same panel and title as the start overlay.
+
+For sound, I heard each piece on its own first, before it went into the game: faster than
+playing a round for every change. Claude generated all of it in Python, including two original
+retro loops. The motors are very faint. Hearing the music made me try a 90-second round with the music
+speeding up for the last 10. The speed-up sounded bad, and 60 seconds was better, so both came
+back out. All the music now comes from an AI soundtrack tool, with one of two in-game tracks picked at random each
+round.
+
+The motors were distracting, so they came down to a quarter of their level. A soft tick each
+second warns that the last 10 seconds have started.
+
+I made the music with a free account on an AI soundtrack tool and grabbed the tracks with the Chrome Audio
+Capture extension. Claude then edited the recordings, cutting each track out and removing the
+silence around it.
+The music fades in and out at both ends of each track, and when the screens change.
