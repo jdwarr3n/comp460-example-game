@@ -28,6 +28,7 @@ enum State { READY, LOWERING, CLOSING, LIFTING, TO_CHUTE, SETTLING, OPENING, RET
 @export var pay_out_speed := 0.6 ## How fast the claw lowers, in meters per second.
 @export var lift_speed := 0.4 ## How fast the claw lifts, in meters per second.
 @export_range(0.05, 1.0) var cable_stiffness := 0.2 ## How firmly the cable corrects stretch.
+@export var cable_width := 0.01 ## How thick the cable is drawn. It has no effect on physics.
 
 @export_group("Claw")
 @export var grip_strength := 1.0 ## How hard the fingers squeeze.
@@ -213,14 +214,19 @@ func _set_fingers(speed: float, strength: float) -> void:
 
 func _draw_cable() -> void:
 	# A slack cable is drawn bowed out to the side. It's only a drawing: it has no physics.
+	# It's a narrow ribbon facing the camera, because a line is always one pixel wide.
 	var top := carriage.global_position
 	var bottom := hub.global_position
 	var sag := slack() * 0.35
+	var camera := get_viewport().get_camera_3d()
+	var to_camera := camera.global_position - top if camera else Vector3.BACK
+	var side := (bottom - top).cross(to_camera).normalized() * cable_width * 0.5
 	_cable_mesh.clear_surfaces()
-	_cable_mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP)
+	_cable_mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLE_STRIP)
 	for i in 25:
 		var t := i / 24.0
 		var point := top.lerp(bottom, t)
 		point.x += sag * sin(PI * t)
-		_cable_mesh.surface_add_vertex(point)
+		_cable_mesh.surface_add_vertex(point - side)
+		_cable_mesh.surface_add_vertex(point + side)
 	_cable_mesh.surface_end()

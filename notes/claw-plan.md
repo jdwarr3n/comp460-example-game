@@ -159,6 +159,8 @@ cube (green, 10), and gold disc (100, close to impossible). Press N to skip to t
 *Done when:* the pile settles without jitter, and the game still runs smoothly and plays
 well.
 
-**Later phases.** Gold coins should say "Comp 460" and be shiny. Better UI (Tab is a stand-in
+**Polish (in progress).** Gold coins (built), materials and reflections (built, being reviewed), then marquee, start screen and difficulty, in-game display, and sound.
+
+**Later phases.** Better UI (Tab is a stand-in
 for the difficulty setting), menus, sound, better arcade-style visuals, more kinds of objects, plush
 toys, and several machines as levels.

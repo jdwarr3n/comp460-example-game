@@ -78,8 +78,7 @@ func _physics_process(delta: float) -> void:
 	for prize in pile.duplicate():
 		if prize.global_position.y < prize_level:
 			score += prize.value
-			pile.erase(prize)
-			prize.queue_free()
+			pile.erase(prize) # It's won: it slides out of the slot and stays there.
 			_show_score()
 	if pile.is_empty():
 		_spawn_pile()

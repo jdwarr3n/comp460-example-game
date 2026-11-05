@@ -3,8 +3,12 @@
 [ext_resource type="Script" path="res://prizes/prize.gd" id="script"]
 
 [sub_resource type="StandardMaterial3D" id="prize_material"]
-albedo_color = Color(0.1, 0.75, 0.75, 1)
-roughness = 0.35
+albedo_color = Color(0.02, 0.6, 0.62, 1)
+metallic_specular = 0.3
+roughness = 0.4
+clearcoat_enabled = true
+clearcoat = 1.0
+clearcoat_roughness = 0.1
 
 [sub_resource type="BoxMesh" id="prize_mesh"]
 material = SubResource("prize_material")

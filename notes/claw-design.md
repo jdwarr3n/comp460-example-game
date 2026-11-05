@@ -318,3 +318,37 @@ on gray, so the prize values moved to a white panel in the upper right.
 
 The final version, minus polish, was ready at 5 pm: five hours from game conception, through
 design, to final version. That's excellent.
+
+### Polish: coin and materials
+
+Coins now say "Comp 460" on both faces, with a raised rim, a ring of beads, and a ridged edge,
+from textures that Claude's script draws. Only the look changed: the physics shape is the same.
+
+The first coin looked very dark, so I asked whether it was the lighting or the color. Claude
+measured it, changing one thing at a time. The same color without metal was three times
+brighter, so the color was fine: metal gets its brightness from what it reflects, and the coin
+had nothing to reflect. Adding warm reflections took the coin from 0.27 to 0.79, but it put a
+milky sheen on everything else, so the cabinet, floor, claw, felt, and prizes got new materials.
+The fingers are dark steel now, so the coin is the gold thing in the machine.
+
+The warm reflections then turned the chrome beige. Chrome shows whatever it mirrors, so we
+replaced them with a neutral room that nobody sees directly: bright ceiling, light strips, dark
+band at eye level, gray floor. The coin stayed bright, at 0.74.
+
+The room floor changed from dark carpet to white tile, from another small script. I liked the
+pattern, but the claw's pale cable disappeared against it, so the tile is now dark slate.
+
+The cable was still faint, partly because Godot always draws a line one pixel wide, which is
+very thin at 4K. It's now a narrow ribbon facing the camera, with a Cable Width setting, and the
+tile is less shiny, so it looks dark. After these changes a test grab of a centered coin failed
+where it had worked before. Instead of assuming that was chance, we ran it three times on this
+version and three on the last commit: 2 of 3 and 1 of 3. The grab varies from run to run, and
+the visual changes hadn't broken it.
+
+The chute's hole turned out to be fake: a real gap in the floor, then a thin dark plate that
+prizes fell through, and they were deleted just below it. I had Claude make it a real tunnel.
+The base is now built around an open yellow shaft. Then I decided prizes should literally pile
+up outside the machine, so the shaft has a slanted yellow ramp at about 39 degrees that ends in
+a real slot in the front. Won prizes tumble out and stay on the room floor. The old painted door
+was too small for the cube, so the slot is 0.55 wide and about 0.45 tall.
+Below the slot, a rectangular tray cut into the room floor collects the prizes.

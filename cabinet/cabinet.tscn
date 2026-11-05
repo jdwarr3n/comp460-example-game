@@ -1,31 +1,43 @@
 [gd_scene format=3]
 
 [sub_resource type="StandardMaterial3D" id="body_material"]
-albedo_color = Color(0.58, 0.07, 0.1, 1)
-metallic = 0.2
-roughness = 0.3
+albedo_color = Color(0.42, 0.015, 0.035, 1)
+roughness = 0.6
+metallic_specular = 0.25
+clearcoat_enabled = true
+clearcoat = 0.25
+clearcoat_roughness = 0.15
 
 [sub_resource type="StandardMaterial3D" id="metal_material"]
-albedo_color = Color(0.8, 0.82, 0.86, 1)
-metallic = 0.9
-roughness = 0.3
+albedo_color = Color(0.92, 0.93, 0.96, 1)
+metallic = 1.0
+roughness = 0.15
+
+[sub_resource type="FastNoiseLite" id="felt_noise"]
+frequency = 0.5
+
+[sub_resource type="NoiseTexture2D" id="felt_texture"]
+seamless = true
+as_normal_map = true
+bump_strength = 6.0
+noise = SubResource("felt_noise")
 
 [sub_resource type="StandardMaterial3D" id="felt_material"]
-albedo_color = Color(0.1, 0.12, 0.32, 1)
-roughness = 0.95
+albedo_color = Color(0.13, 0.16, 0.45, 1)
+roughness = 1.0
+metallic_specular = 0.1
+normal_enabled = true
+normal_texture = SubResource("felt_texture")
+uv1_scale = Vector3(4, 4, 4)
+uv1_triplanar = true
 
 [sub_resource type="StandardMaterial3D" id="chute_material"]
 albedo_color = Color(0.95, 0.72, 0.2, 1)
 roughness = 0.4
 
-[sub_resource type="StandardMaterial3D" id="dark_material"]
-albedo_color = Color(0.02, 0.02, 0.03, 1)
-roughness = 0.9
-
 [sub_resource type="StandardMaterial3D" id="glass_material"]
 transparency = 1
 albedo_color = Color(0.75, 0.88, 1, 0.1)
-metallic = 0.3
 roughness = 0.05
 
 [sub_resource type="StandardMaterial3D" id="marquee_material"]
@@ -33,10 +45,6 @@ albedo_color = Color(1, 0.8, 0.25, 1)
 emission_enabled = true
 emission = Color(1, 0.72, 0.2, 1)
 emission_energy_multiplier = 1.6
-
-[sub_resource type="BoxMesh" id="mesh_0"]
-material = SubResource("body_material")
-size = Vector3(2.6, 0.75, 2.6)
 
 [sub_resource type="BoxMesh" id="mesh_1"]
 material = SubResource("felt_material")
@@ -51,10 +59,6 @@ size = Vector3(0.665, 0.05, 1.735)
 
 [sub_resource type="BoxShape3D" id="shape_2"]
 size = Vector3(0.665, 0.05, 1.735)
-
-[sub_resource type="BoxMesh" id="mesh_3"]
-material = SubResource("dark_material")
-size = Vector3(0.665, 0.01, 0.665)
 
 [sub_resource type="BoxMesh" id="mesh_4"]
 material = SubResource("chute_material")
@@ -157,30 +161,211 @@ size = Vector3(0.02, 2.4, 2.4)
 [sub_resource type="BoxShape3D" id="shape_23"]
 size = Vector3(0.02, 2.4, 2.4)
 
-[sub_resource type="BoxMesh" id="mesh_24"]
-material = SubResource("dark_material")
-size = Vector3(0.5, 0.35, 0.01)
+[sub_resource type="BoxMesh" id="basemain_mesh"]
+material = SubResource("body_material")
+size = Vector3(1.835, 0.75, 2.6)
 
-[sub_resource type="BoxShape3D" id="catch_0"]
-size = Vector3(2.6, 0.04, 2.6)
+[sub_resource type="BoxShape3D" id="basemain_shape"]
+size = Vector3(1.835, 0.75, 2.6)
 
-[sub_resource type="BoxShape3D" id="catch_1"]
-size = Vector3(2.6, 0.75, 0.04)
+[sub_resource type="BoxMesh" id="baseback_mesh"]
+material = SubResource("body_material")
+size = Vector3(0.765, 0.75, 1.835)
 
-[sub_resource type="BoxShape3D" id="catch_2"]
-size = Vector3(2.6, 0.75, 0.04)
+[sub_resource type="BoxShape3D" id="baseback_shape"]
+size = Vector3(0.765, 0.75, 1.835)
 
-[sub_resource type="BoxShape3D" id="catch_3"]
-size = Vector3(0.04, 0.75, 2.6)
+[sub_resource type="BoxMesh" id="baseright_mesh"]
+material = SubResource("body_material")
+size = Vector3(0.1, 0.75, 0.665)
 
-[sub_resource type="BoxShape3D" id="catch_4"]
-size = Vector3(0.04, 0.75, 2.6)
+[sub_resource type="BoxShape3D" id="baseright_shape"]
+size = Vector3(0.1, 0.75, 0.665)
+
+[sub_resource type="BoxMesh" id="liningleft_mesh"]
+material = SubResource("chute_material")
+size = Vector3(0.006, 0.8, 0.665)
+
+[sub_resource type="BoxMesh" id="liningright_mesh"]
+material = SubResource("chute_material")
+size = Vector3(0.006, 0.8, 0.665)
+
+[sub_resource type="BoxMesh" id="liningback_mesh"]
+material = SubResource("chute_material")
+size = Vector3(0.665, 0.8, 0.006)
+
+[sub_resource type="PhysicsMaterial" id="ramp_physics"]
+friction = 0.05
+
+[sub_resource type="BoxMesh" id="ramp_mesh"]
+material = SubResource("chute_material")
+size = Vector3(0.665, 0.04, 0.982182)
+
+[sub_resource type="BoxShape3D" id="ramp_shape"]
+size = Vector3(0.665, 0.04, 0.982182)
+
+[sub_resource type="BoxMesh" id="basefrontleft_mesh"]
+material = SubResource("body_material")
+size = Vector3(0.055, 0.75, 0.1)
+
+[sub_resource type="BoxShape3D" id="basefrontleft_shape"]
+size = Vector3(0.055, 0.75, 0.1)
+
+[sub_resource type="BoxMesh" id="basefrontright_mesh"]
+material = SubResource("body_material")
+size = Vector3(0.155, 0.75, 0.1)
+
+[sub_resource type="BoxShape3D" id="basefrontright_shape"]
+size = Vector3(0.155, 0.75, 0.1)
+
+[sub_resource type="BoxMesh" id="basefronttop_mesh"]
+material = SubResource("body_material")
+size = Vector3(0.555, 0.13, 0.1)
+
+[sub_resource type="BoxShape3D" id="basefronttop_shape"]
+size = Vector3(0.555, 0.13, 0.1)
+
+[sub_resource type="BoxMesh" id="basefrontsill_mesh"]
+material = SubResource("body_material")
+size = Vector3(0.555, 0.08, 0.1)
+
+[sub_resource type="BoxShape3D" id="basefrontsill_shape"]
+size = Vector3(0.555, 0.08, 0.1)
+
+[sub_resource type="BoxMesh" id="liningfronttop_mesh"]
+material = SubResource("chute_material")
+size = Vector3(0.665, 0.18, 0.006)
+
+[sub_resource type="BoxMesh" id="liningfrontleft_mesh"]
+material = SubResource("chute_material")
+size = Vector3(0.055, 0.62, 0.006)
+
+[sub_resource type="BoxMesh" id="liningfrontright_mesh"]
+material = SubResource("chute_material")
+size = Vector3(0.055, 0.62, 0.006)
+
+[sub_resource type="BoxMesh" id="slotleft_mesh"]
+material = SubResource("chute_material")
+size = Vector3(0.006, 0.62, 0.1)
+
+[sub_resource type="BoxMesh" id="slotright_mesh"]
+material = SubResource("chute_material")
+size = Vector3(0.006, 0.62, 0.1)
+
+[sub_resource type="BoxMesh" id="slottop_mesh"]
+material = SubResource("chute_material")
+size = Vector3(0.555, 0.006, 0.1)
 
 [node name="Cabinet" type="Node3D"]
 
-[node name="Base" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.425, 0)
-mesh = SubResource("mesh_0")
+[node name="BaseMain" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3825, -0.425, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="BaseMain"]
+mesh = SubResource("basemain_mesh")
+
+[node name="Collision" type="CollisionShape3D" parent="BaseMain"]
+shape = SubResource("basemain_shape")
+
+[node name="BaseBack" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9175, -0.425, -0.3825)
+
+[node name="Mesh" type="MeshInstance3D" parent="BaseBack"]
+mesh = SubResource("baseback_mesh")
+
+[node name="Collision" type="CollisionShape3D" parent="BaseBack"]
+shape = SubResource("baseback_shape")
+
+[node name="BaseRight" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.25, -0.425, 0.8675)
+
+[node name="Mesh" type="MeshInstance3D" parent="BaseRight"]
+mesh = SubResource("baseright_mesh")
+
+[node name="Collision" type="CollisionShape3D" parent="BaseRight"]
+shape = SubResource("baseright_shape")
+
+[node name="LiningLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.538, -0.4, 0.8675)
+mesh = SubResource("liningleft_mesh")
+
+[node name="LiningRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.197, -0.4, 0.8675)
+mesh = SubResource("liningright_mesh")
+
+[node name="LiningBack" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8675, -0.4, 0.538)
+mesh = SubResource("liningback_mesh")
+
+[node name="BaseFrontLeft" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5625, -0.425, 1.25)
+
+[node name="Mesh" type="MeshInstance3D" parent="BaseFrontLeft"]
+mesh = SubResource("basefrontleft_mesh")
+
+[node name="Collision" type="CollisionShape3D" parent="BaseFrontLeft"]
+shape = SubResource("basefrontleft_shape")
+
+[node name="BaseFrontRight" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2225, -0.425, 1.25)
+
+[node name="Mesh" type="MeshInstance3D" parent="BaseFrontRight"]
+mesh = SubResource("basefrontright_mesh")
+
+[node name="Collision" type="CollisionShape3D" parent="BaseFrontRight"]
+shape = SubResource("basefrontright_shape")
+
+[node name="BaseFrontTop" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8675, -0.115, 1.25)
+
+[node name="Mesh" type="MeshInstance3D" parent="BaseFrontTop"]
+mesh = SubResource("basefronttop_mesh")
+
+[node name="Collision" type="CollisionShape3D" parent="BaseFrontTop"]
+shape = SubResource("basefronttop_shape")
+
+[node name="BaseFrontSill" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8675, -0.76, 1.25)
+
+[node name="Mesh" type="MeshInstance3D" parent="BaseFrontSill"]
+mesh = SubResource("basefrontsill_mesh")
+
+[node name="Collision" type="CollisionShape3D" parent="BaseFrontSill"]
+shape = SubResource("basefrontsill_shape")
+
+[node name="LiningFrontTop" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8675, -0.09, 1.197)
+mesh = SubResource("liningfronttop_mesh")
+
+[node name="LiningFrontLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5625, -0.49, 1.197)
+mesh = SubResource("liningfrontleft_mesh")
+
+[node name="LiningFrontRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1725, -0.49, 1.197)
+mesh = SubResource("liningfrontright_mesh")
+
+[node name="SlotLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.593, -0.49, 1.25)
+mesh = SubResource("slotleft_mesh")
+
+[node name="SlotRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.142, -0.49, 1.25)
+mesh = SubResource("slotright_mesh")
+
+[node name="SlotTop" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8675, -0.183, 1.25)
+mesh = SubResource("slottop_mesh")
+
+[node name="ChuteRamp" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.77888, -0.62718, 0, 0.62718, 0.77888, 0.8675, -0.42358, 0.90496)
+physics_material_override = SubResource("ramp_physics")
+
+[node name="Mesh" type="MeshInstance3D" parent="ChuteRamp"]
+mesh = SubResource("ramp_mesh")
+
+[node name="Collision" type="CollisionShape3D" parent="ChuteRamp"]
+shape = SubResource("ramp_shape")
 
 [node name="FloorMain" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3325, -0.025, 0)
@@ -199,10 +384,6 @@ mesh = SubResource("mesh_2")
 
 [node name="Collision" type="CollisionShape3D" parent="FloorSide"]
 shape = SubResource("shape_2")
-
-[node name="ChuteHole" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8675, -0.04, 0.8675)
-mesh = SubResource("mesh_3")
 
 [node name="ChuteWallA" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.535, 0.15, 0.86)
@@ -319,34 +500,8 @@ mesh = SubResource("mesh_23")
 [node name="Collision" type="CollisionShape3D" parent="GlassRight"]
 shape = SubResource("shape_23")
 
-[node name="PrizeDoor" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.925, -0.55, 1.305)
-mesh = SubResource("mesh_24")
-
 [node name="InnerLight" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
 light_color = Color(1, 0.93, 0.82, 1)
 light_energy = 2.2
 omni_range = 5.5
-
-[node name="PrizeCatch" type="StaticBody3D" parent="."]
-
-[node name="CatchBottom" type="CollisionShape3D" parent="PrizeCatch"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.78, 0)
-shape = SubResource("catch_0")
-
-[node name="CatchFront" type="CollisionShape3D" parent="PrizeCatch"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.425, 1.28)
-shape = SubResource("catch_1")
-
-[node name="CatchBack" type="CollisionShape3D" parent="PrizeCatch"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.425, -1.28)
-shape = SubResource("catch_2")
-
-[node name="CatchLeft" type="CollisionShape3D" parent="PrizeCatch"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.28, -0.425, 0)
-shape = SubResource("catch_3")
-
-[node name="CatchRight" type="CollisionShape3D" parent="PrizeCatch"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.28, -0.425, 0)
-shape = SubResource("catch_4")

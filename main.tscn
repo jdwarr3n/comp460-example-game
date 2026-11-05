@@ -4,24 +4,71 @@
 [ext_resource type="PackedScene" path="res://cabinet/cabinet.tscn" id="cabinet"]
 [ext_resource type="PackedScene" path="res://claw/claw.tscn" id="claw"]
 [ext_resource type="Script" path="res://camera/orbit_camera.gd" id="camera"]
+[ext_resource type="Texture2D" path="res://cabinet/reflection_room.png" id="reflection_room"]
+[ext_resource type="Texture2D" path="res://cabinet/floor_tile.png" id="floor_tile"]
+[ext_resource type="Texture2D" path="res://cabinet/floor_tile_normal.png" id="floor_tile_normal"]
+
+[sub_resource type="PanoramaSkyMaterial" id="reflection_sky_material"]
+panorama = ExtResource("reflection_room")
+energy_multiplier = 1.4
+
+[sub_resource type="Sky" id="reflection_sky"]
+sky_material = SubResource("reflection_sky_material")
 
 [sub_resource type="Environment" id="env"]
 background_mode = 1
 background_color = Color(0.07, 0.07, 0.1, 1)
+sky = SubResource("reflection_sky")
 ambient_light_source = 2
 ambient_light_color = Color(1, 1, 1, 1)
 ambient_light_energy = 0.4
+reflected_light_source = 2
 
 [sub_resource type="StandardMaterial3D" id="room_material"]
-albedo_color = Color(0.2, 0.2, 0.24, 1)
-roughness = 0.7
+albedo_texture = ExtResource("floor_tile")
+roughness = 0.75
+metallic_specular = 0.2
+normal_enabled = true
+normal_texture = ExtResource("floor_tile_normal")
+uv1_scale = Vector3(1.25, 1.25, 1.25)
+uv1_world_triplanar = true
+uv1_triplanar = true
+texture_filter = 5
 
-[sub_resource type="BoxMesh" id="room_mesh"]
+[sub_resource type="BoxMesh" id="floorleft_mesh"]
 material = SubResource("room_material")
-size = Vector3(30, 0.1, 30)
+size = Vector3(15.3175, 0.2, 30)
 
-[sub_resource type="BoxShape3D" id="room_shape"]
-size = Vector3(30, 0.1, 30)
+[sub_resource type="BoxShape3D" id="floorleft_shape"]
+size = Vector3(15.3175, 0.2, 30)
+
+[sub_resource type="BoxMesh" id="floorright_mesh"]
+material = SubResource("room_material")
+size = Vector3(13.5825, 0.2, 30)
+
+[sub_resource type="BoxShape3D" id="floorright_shape"]
+size = Vector3(13.5825, 0.2, 30)
+
+[sub_resource type="BoxMesh" id="floorback_mesh"]
+material = SubResource("room_material")
+size = Vector3(1.1, 0.2, 16.3)
+
+[sub_resource type="BoxShape3D" id="floorback_shape"]
+size = Vector3(1.1, 0.2, 16.3)
+
+[sub_resource type="BoxMesh" id="floorfront_mesh"]
+material = SubResource("room_material")
+size = Vector3(1.1, 0.2, 12.8)
+
+[sub_resource type="BoxShape3D" id="floorfront_shape"]
+size = Vector3(1.1, 0.2, 12.8)
+
+[sub_resource type="BoxMesh" id="traybottom_mesh"]
+material = SubResource("room_material")
+size = Vector3(1.1, 0.1, 0.9)
+
+[sub_resource type="BoxShape3D" id="traybottom_shape"]
+size = Vector3(1.1, 0.1, 0.9)
 
 [sub_resource type="StyleBoxFlat" id="panel_style"]
 bg_color = Color(1, 1, 1, 1)
@@ -44,14 +91,52 @@ environment = SubResource("env")
 transform = Transform3D(0.866, -0.354, 0.354, 0, 0.707, 0.707, -0.5, -0.612, 0.612, 0, 5, 0)
 shadow_enabled = true
 
-[node name="RoomFloor" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.85, 0)
+[node name="RoomFloor" type="Node3D" parent="."]
 
-[node name="Mesh" type="MeshInstance3D" parent="RoomFloor"]
-mesh = SubResource("room_mesh")
+[node name="FloorLeft" type="StaticBody3D" parent="RoomFloor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.34125, -0.9, 0)
 
-[node name="Collision" type="CollisionShape3D" parent="RoomFloor"]
-shape = SubResource("room_shape")
+[node name="Mesh" type="MeshInstance3D" parent="RoomFloor/FloorLeft"]
+mesh = SubResource("floorleft_mesh")
+
+[node name="Collision" type="CollisionShape3D" parent="RoomFloor/FloorLeft"]
+shape = SubResource("floorleft_shape")
+
+[node name="FloorRight" type="StaticBody3D" parent="RoomFloor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.20875, -0.9, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="RoomFloor/FloorRight"]
+mesh = SubResource("floorright_mesh")
+
+[node name="Collision" type="CollisionShape3D" parent="RoomFloor/FloorRight"]
+shape = SubResource("floorright_shape")
+
+[node name="FloorBack" type="StaticBody3D" parent="RoomFloor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8675, -0.9, -6.85)
+
+[node name="Mesh" type="MeshInstance3D" parent="RoomFloor/FloorBack"]
+mesh = SubResource("floorback_mesh")
+
+[node name="Collision" type="CollisionShape3D" parent="RoomFloor/FloorBack"]
+shape = SubResource("floorback_shape")
+
+[node name="FloorFront" type="StaticBody3D" parent="RoomFloor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8675, -0.9, 8.6)
+
+[node name="Mesh" type="MeshInstance3D" parent="RoomFloor/FloorFront"]
+mesh = SubResource("floorfront_mesh")
+
+[node name="Collision" type="CollisionShape3D" parent="RoomFloor/FloorFront"]
+shape = SubResource("floorfront_shape")
+
+[node name="TrayBottom" type="StaticBody3D" parent="RoomFloor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8675, -1.05, 1.75)
+
+[node name="Mesh" type="MeshInstance3D" parent="RoomFloor/TrayBottom"]
+mesh = SubResource("traybottom_mesh")
+
+[node name="Collision" type="CollisionShape3D" parent="RoomFloor/TrayBottom"]
+shape = SubResource("traybottom_shape")
 
 [node name="Cabinet" parent="." instance=ExtResource("cabinet")]
 
