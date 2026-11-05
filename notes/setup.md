@@ -78,15 +78,13 @@ this kind of install. Reload VS Code if the extension doesn't show up.
 ### Step 7: Install Git and make a GitHub account
 
 Ask Claude Code to help install Git on your computer, then make a GitHub account at
-[github.com](https://github.com). Use your Rice email, and sign up for the
-[GitHub Student Developer Pack](https://education.github.com/pack), which includes free private
-repositories and a lot else.
+[github.com](https://github.com).
 
 Then type this in the Claude panel:
 
 > Set my Git name and email, and help me sign in to GitHub so you can clone and push for me.
 
-## Try the example game
+## Try Claw 460
 
 From here on, "Claude" means Claude Code in VS Code, not Claude chat.
 
@@ -97,9 +95,10 @@ Ask Claude to clone this repo into an empty folder:
 
 ### Step 9: Read the notes
 
-Read the README and the other notes in the repo.
+Read the README and the other notes in the repo. [claw-design.md](claw-design.md) is a good
+overview of the design principles I followed in building Claw 460.
 
-### Step 10: Run the game
+### Step 10: Run Claw 460
 
 1. In Godot's Project Manager, click **Import**.
 2. Choose the `project.godot` file in the folder you cloned. If Godot's file dialog is
@@ -110,7 +109,9 @@ Read the README and the other notes in the repo.
 
 ### Step 11: Change something
 
-Ask Claude for one small change, then press Play to see it.
+Ask Claude for one small change, then press Play to see it. For example:
+
+> Make the balls green.
 
 ## Start your team repo
 
@@ -143,5 +144,6 @@ something, and tell it what to do when two of you edit the same file.
 **The `.godot/` folder.** Make sure it's in your `.gitignore`, since it's generated and large.
 Claude will know.
 
-**API keys.** Never put an API key inside a game you distribute. Anything in the game is public
-the day you ship.
+**API keys.** Never commit an API key to your repo. Keep keys in a separate file and ask Claude
+to add it to `.gitignore`. Never put a key inside a game you distribute, either: anything in the
+game is public the day you ship.
