@@ -27,4 +27,6 @@ to lower the claw, release to close and lift, and press R to restart.
 - [Claw plan](notes/claw-plan.md): what we're building, in phases.
 - [Claw design notes](notes/claw-design.md): how the game was designed and built, and why.
 - [Claw build log](notes/claw-build-log.md): the full story, with every test and number.
+- [Exporting to itch.io](notes/itch-export.md): the web build and the
+  [live game](https://jdwarr3n.itch.io/claw-460).
 - [Bloopers](bloopers/): funny physics, on video.

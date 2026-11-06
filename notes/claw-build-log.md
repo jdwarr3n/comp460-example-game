@@ -408,3 +408,29 @@ harder hits, and only a few play at once, so the pile stays quiet behind the sta
 tick each second warns that the last 10 seconds have started.
 
 That finished the game at midnight: seven hours in all, from conception to final version.
+
+### Web export
+
+Two days after finishing the game, I tried a web build, so it could go on itch.io. Claude built it
+from a clean copy outside the repo, and it ran the first time, with no changes to the game.
+
+The web uses the Compatibility renderer, not Forward Plus. The colors came out brighter, the dark
+room turned purple-gray, and the glow went away. I was fine with that. I had expected trouble from
+120-tick physics with 40 prizes, but it held 120 ticks in the browser, even with 39 prizes moving.
+I also expected a big download because of the WAV files, but Godot compresses the music on import,
+and the zip is 17.3 MB.
+
+The surprise was the first load: the page froze for 20 to 30 seconds before the game appeared.
+Later loads were fast. The likely cause is shaders compiling on the player's machine, so it can't
+be fixed ahead of time. We added a message to the web page, "Compiling shaders.  Please be patient
+(20 secs)."
+
+The message took three tries. It first covered the Godot logo, so we moved it up. Then I couldn't
+find it at all. Claude's test in Chrome had passed, but when I tried Firefox the message flashed for
+0.3 seconds and vanished. Claude's code took five quick frames to mean the wait was over, and some
+of those frames came before the game had started. Chrome had passed by luck of timing. Testing in
+a second browser found a bug that the automated test couldn't.
+
+On itch.io, a 1280 × 720 embed was too big for my window and spawned scrollbars, so we switched to
+Click to launch in fullscreen. Players exit with the browser's Back button. `notes/itch-export.md`
+has the steps.

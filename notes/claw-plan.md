@@ -175,6 +175,9 @@ well.
   prize values upper right. Difficulty changes between games.
 - **Sound:** music, motors, collisions, and a soft countdown.
 
+**Web version (done).** The game runs in a browser at https://jdwarr3n.itch.io/claw-460. See
+`notes/itch-export.md`.
+
 **Later phases.** More kinds of objects, plush toys, and several machines as levels.
 
 Difficulty could also come from grip strength, with each level or machine using a different
