@@ -11,7 +11,8 @@ Buy a Claude Pro subscription and keep your receipts, as the email explains.
 
 ### Step 2: Visit Claude chat
 
-Go to [claude.ai](https://claude.ai) and sign in. Keep it handy for questions.
+Go to [claude.ai](https://claude.ai) and sign in. Keep it handy for questions while you are
+setting up Claude in VS Code.
 
 ### Step 3: Install VS Code
 
@@ -116,6 +117,21 @@ Ask Claude for one small change, then press Play to see it. For example:
 
 One team member asks Claude to create a private team repo and add teammates as
 collaborators.
+
+Next, add your proposal to the root of the team repo as `proposal.pdf`. Remove the student
+IDs first, even though the repo is private. Delete them from your original document and export
+a new PDF, because covering them up in the PDF doesn't remove them.
+
+Then ask Claude to set up the project notes:
+
+> Copy notes/CLAUDE-template.md from the Claw 460 repo into the root of our team repo as
+> CLAUDE.md, and fill in the game summary from proposal.pdf. Then copy notes/plan-template.md
+> into the root as plan.md and fill it in from proposal.pdf. Ask us about anything the
+> proposal doesn't cover, and don't invent answers. Then commit and push all three files.
+
+`CLAUDE.md` holds your project rules. Claude reads it at the start of each conversation in the
+repo, so you don't have to repeat them. `plan.md` describes your game as it stands now. Read both files as a team and fix anything
+that's wrong. Keep the plan current, and add to `CLAUDE.md` as your team's conventions develop.
 
 ### Step 13: Everyone commits
 
